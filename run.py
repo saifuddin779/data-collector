@@ -1,4 +1,4 @@
-import sys, os, random, string, time, 
+import sys, os, random, string, time
 from subprocess import call, Popen, PIPE, STDOUT
 from itertools import cycle
 from datetime import datetime as dt
@@ -72,7 +72,7 @@ class DigitalOceanManager(object):
 						'scp -o "StrictHostKeyChecking no" install.sh root@%s:install.sh' % ip_address, #--sends the install.sh
 						'ssh -o "StrictHostKeyChecking no" -t root@%s bash install.sh %s %s' % (ip_address, self.country, self.master_node) #--runs the install.sh on slave
 						]
-			execute = subprocess.call([command[0]], shell=True)
+			execute = call([command[0]], shell=True)
 			p = Popen(command[1], shell=True, stdout=PIPE, stderr=STDOUT, bufsize=1, close_fds=True)
 			#for command_ in commands:
 			#	execute = subprocess.call([command_], shell=True)
