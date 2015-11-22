@@ -51,6 +51,9 @@ class indeed_resumes(object):
 				#--do a plain check with a regular, simple keyword like ms excel
 				#--if that keyword also results in nothing, then you are blocked.
 				#--simply send the database, update the droplet name to master, and exit and master will destroy you.
+				
+				
+
 				print 'THE CONDITION IS HERE..'
 				self.send_to_master()
 				self.r_master.hset('droplets', socket.gethostname(),  True)
@@ -82,7 +85,7 @@ class indeed_resumes(object):
 				db_insert_hash(n_profiles, self.country_code)
 			except:
 				print 'db locked..will wait for few secs'
-				slp(20)
+				slp(5)
 				db_insert_hash(n_profiles, self.country_code)
 			print 'inserted %d records to db.. %s' % (len(n_profiles), keyword)	
 			n_profiles = {}
@@ -98,11 +101,12 @@ class indeed_resumes(object):
 		resp = None
 		while not resp:
 			try:
-				user_agent = ''.join(random.choice(string.ascii_lowercase + string.digits) for _ in range(10))
+				#user_agent = ''.join(random.choice(string.ascii_lowercase + string.digits) for _ in range(10))
+				user_agent = self.user_agents_cycle.next()
 				resp = requests.get(init_url, headers = {'user_agent': user_agent})
 			except Exception, e:
 				print str(e)
-				slp(30)
+				slp(5)
 				pass
 		if resp.status_code == 200:
 			filtering_urls = pq_(resp.text)
@@ -121,7 +125,7 @@ class indeed_resumes(object):
 				resp = requests.get(url_, headers = {'user_agent': user_agent})
 			except Exception, e:
 				print str(e)
-				slp(30)
+				slp(5)
 				pass
 		if resp.status_code == 200:
 			data = pq_(resp.text)
@@ -139,6 +143,7 @@ class indeed_resumes(object):
 			keywords_done_idx = -1
 		else:
 			keywords_done_idx = int(keywords_done_idx)
+		
 		for i, keyword in enumerate(self.keywords):
 			keyword = keyword.replace('\n', '')
 			if i <= keywords_done_idx:
