@@ -51,9 +51,6 @@ class indeed_resumes(object):
 				#--do a plain check with a regular, simple keyword like ms excel
 				#--if that keyword also results in nothing, then you are blocked.
 				#--simply send the database, update the droplet name to master, and exit and master will destroy you.
-				
-				
-
 				print 'THE CONDITION IS HERE..'
 				self.send_to_master()
 				self.r_master.hset('droplets', socket.gethostname(),  True)
@@ -89,6 +86,7 @@ class indeed_resumes(object):
 				db_insert_hash(n_profiles, self.country_code)
 			print 'inserted %d records to db.. %s' % (len(n_profiles), keyword)	
 			n_profiles = {}
+			slp(3) #--sleeping for 2 secs for every filter for not making calls too fast and get blocked quickly
 			gc.collect()
 		gc.collect()
 		current_time = tm()
