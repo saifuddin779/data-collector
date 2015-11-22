@@ -1,12 +1,12 @@
 #/bin/sh
+country="$1"
+master="$2"
+
 while ps aux | grep [a]pt;
 do
 	echo "sleeping.."
 	sleep 5
 done
-
-country="$1"
-master="$2"
 
 echo y | apt-get update
 echo y | apt-get install git
