@@ -144,9 +144,6 @@ Tuber
 Scout
 Frier
 Firer
-Gopher
-Valver
-Tucker
 Cupper
 Grower
 Pinker
@@ -552,12 +549,6 @@ Culler
 Server
 Beller
 Burler
-Heddler
-Steamer
-Chipper
-Courier
-Greeter
-Senator
 Swabber
 Spudder
 Jollier
@@ -1013,9 +1004,6 @@ Lampman
 Slugger
 Auditor
 Kneader
-Sergeant
-Stitcher
-Mechanic
 Turn Out
 Recorder
 Composer
@@ -1395,10 +1383,6 @@ Tenterer
 Drop Man
 Temperer
 Beamster
-Fuel Jack
-Sprinkler
-Orthotist
-Gum Maker
 Runner On
 Tax Clerk
 Collector
@@ -1932,21 +1916,6 @@ Quahogger
 Pipeliner
 Deaconess
 Garnisher
-Prop Maker
-Form Layer
-Gemologist
-Dog Bather
-Sash Maker
-Peg Driver
-Hotel Maid
-Line Mover
-Belt Sewer
-Lobsterman
-Shoeshiner
-Naturopath
-Structurer
-Ergonomist
-Mig Welder
 Prototyper
 Zinc Miner
 Trip Rider
@@ -3095,23 +3064,6 @@ Cordwainer
 Arc Welder
 Ringmaster
 Tap Puller
-Tire Sorter
-Paver Layer
-Fuse Cutter
-Boat Person
-Mule Tender
-Parent Aide
-Vein Pumper
-Seam Rubber
-Gate Keeper
-Rod Greaser
-Sole Seamer
-Bus Monitor
-Dock Pumper
-Floor Waxer
-Cold Header
-Brim Molder
-Chambermaid
 Book Keeper
 Last Puller
 Tree Feller
@@ -5109,22 +5061,6 @@ Kettle Cook
 Reel Worker
 Auto Tester
 Crew Leader
-Die Designer
-Driver/Guide
-Barge Worker
-Service Girl
-Dryer Feeder
-Patternmaker
-Burr Grinder
-Cork Grinder
-DTP Operator
-Studio Owner
-Chiropractor
-Border Guard
-Zoo Director
-Drawer Waxer
-Tax Attorney
-Tip Finisher
 Hand Stamper
 Radio Artist
 Cloth Worker
@@ -7312,27 +7248,6 @@ Lens Grinder
 Violin Tutor
 Press Feeder
 Taffy Puller
-Art Appraiser
-Store Shopper
-Olive Knocker
-Barker Peeler
-Land Examiner
-Farm Products
-Roll Operator
-Tool Polisher
-Kitchen Clerk
-Weather Clerk
-Filler Feeder
-Third Officer
-Support Staff
-Canvas Worker
-Dean of Women
-Transit Clerk
-Air Brake Man
-Bunker Worker
-Ticket Sorter
-Cheese Cutter
-Tire Servicer
 Leather Drier
 Sales Teacher
 Mural Painter
@@ -9146,7 +9061,6 @@ Bright Cutter
 Lamp Mechanic
 Bottle Tester
 Roping Tender
-Roll Operator
 Linen Checker
 Ribbon Cutter
 Machine Inker
@@ -9538,23 +9452,6 @@ Museum Docent
 Dry Ice Maker
 Ice Cream Man
 Hose Stripper
-Metal Solderer
-Roll On Worker
-Metal Hardener
-Logging Worker
-Driller Helper
-SAS Programmer
-Chef De Partie
-Awning Erector
-Bareback Rider
-House Designer
-Crown Attacher
-Guest Services
-Slate Splitter
-Security Agent
-Cattle Brander
-Air Box Tester
-Blender Helper
 Jewelry Racker
 Stove Mechanic
 Relay Motorman
@@ -11712,16 +11609,6 @@ Decontaminator
 National Sales
 Harness Puller
 Customs Broker
-Action Finisher
-Military Lawyer
-Business Banker
-Load Dispatcher
-Laborer/Key Man
-Company Laborer
-Banking Analyst
-Rough Carpenter
-Freight Hustler
-Heel Compressor
 Mc Kay Stitcher
 V Groove Cutter
 Service Cleaner
@@ -13814,23 +13701,6 @@ Wheel Assembler
 Pattern Painter
 Range Ecologist
 Bulk Mail Clerk
-Property Officer
-Music Cataloguer
-Equipment Driver
-Parts Cataloguer
-Railway Engineer
-Airplane Cleaner
-Vegetable Packer
-Side Door Worker
-Front Desk Clerk
-Wage Conciliator
-Clothing Presser
-Casing Inspector
-Cutter-Inspector
-Auto Body Worker
-Hand Paint Mixer
-Museum Archivist
-Dispatch Manager
 Upholstery Sewer
 Shearer Operator
 Stone Fabricator
@@ -15950,23 +15820,6 @@ Clutch Rebuilder
 Change Attendant
 Forging Operator
 Bite-Block Maker
-Masonry Installer
-Lung Gun Operator
-Custodial Officer
-Stadium Attendant
-Jinrikisha Driver
-Molder Apprentice
-Can Reconditioner
-Magnetic Observer
-Hydrator Operator
-Antisqueak Filler
-Ammonia Distiller
-Automation Driver
-Cold Roll Catcher
-Installment Agent
-Inventory Checker
-Actuarial Manager
-Drug Abuse Worker
 Ediphone Operator
 Survey Technician
 Event AV Operator
@@ -18055,24 +17908,6 @@ Tail Board Worker
 Dead Mail Checker
 Wood Block Artist
 Foot Straightener
-Edger Saw Operator
-Melangeur Operator
-Agronomy Professor
-Cotton Seed Culler
-Power Line Lineman
-Airline Dispatcher
-Chief Psychologist
-Packaging Designer
-Smoking Pipe Maker
-Cell Tower Climber
-Cellular Biologist
-Roofing Applicator
-Agricultural Pilot
-Inside Upholsterer
-Network Consultant
-Shank Piece Tacker
-Ammonia Technician
-Metal Patternmaker
 Purchasing Officer
 Car Rental Manager
 Emery Wheel Worker
@@ -20220,19 +20055,6 @@ Front End Mechanic
 Aerosol Supervisor
 Base-Draw Operator
 clojureBulk Filler
-Item Repair Manager
-Beam Press Operator
-Livestock Inspector
-Last Pattern Grader
-Shearing Supervisor
-Contracting Officer
-Machine Paint Mixer
-Telephone Collector
-Clothing Consultant
-Senior Investigator
-Cake Press Operator
-Logistics Associate
-Medical Transcriber
 Section Housekeeper
 Quality Coordinator
 Instrument Adjuster
@@ -22313,24 +22135,6 @@ Railway Head Tender
 Social Staff Worker
 Powerplant Operator
 Compugraph Operator
-Byproducts Extractor
-Venetian Blind Maker
-Migration Specialist
-Automatic Toe Laster
-Jewel Bearing Turner
-Vocational Counselor
-Gas Plant Dispatcher
-Yarn Skeins Examiner
-Neon Light Installer
-Employment Counselor
-Classification Clerk
-Bulk Sealer Operator
-Real Estate Assessor
-Ecological Economist
-TDP Displays Analyst
-Protozoology Teacher
-Aquaculture Director
-Yield Loss Inspector
 Clinical Audiologist
 University President
 Ceiling Chute Puller
@@ -24369,17 +24173,6 @@ Highway Truck Driver
 Tree Tapping Laborer
 Dust Brush Assembler
 Curriculum Developer
-Grievance Coordinator
-Language Arts Teacher
-Retort Load Expediter
-Grocery Store Manager
-Enviromental Attorney
-Underwater Roboticist
-Blasting Contract Man
-Roving Court Reporter
-Sales Account Manager
-Garden Center Manager
-In-Flight Crew Member
 Acupressure Therapist
 Maintenance Associate
 Copy Machine Operator
@@ -26222,15 +26015,6 @@ Office System Analyst
 Engineering Inspector
 Power Supply Engineer
 Fishing Rod Assembler
-Graphic Design Teacher
-Senior Account Manager
-Manufacturing Director
-Hand or Machine Paster
-Parole Hearing Officer
-Mechanical Car Checker
-Electric Mule Operator
-Athletic Events Scorer
-Deputy Sheriff-Custody
 Chemical Unit Operator
 High Pressure Operator
 Weatherseal Technician
@@ -27914,22 +27698,6 @@ Patch Machine Operator
 Mailing Machine Helper
 Hospital Social Worker
 Crime Scene Technician
-Advertising Coordinator
-Production Technologist
-Director of Information
-Pneumatic Jack Operator
-Hearing Therapy Teacher
-Railway Switch Operator
-Operations Intelligence
-Human Resources Trainer
-Journeyman Patternmaker
-Mental Retardation Aide
-Cleaner Touch-Up Worker
-Room Service Supervisor
-Artificial Flower Maker
-Veterinary Toxicologist
-Stained Glass Installer
-Machine Shop Supervisor
 Employment Case Manager
 Battery Plate Assembler
 Roller Skates Assembler
@@ -29559,19 +29327,6 @@ Bank Operations Officer
 Thermodynamic Physicist
 Turbo Electric Operator
 Two-Way Radio Installer
-Drywall Finisher Foreman
-Aquatic Facility Manager
-Risk Prevention Engineer
-Media Relations Director
-Career Services Director
-Career Discovery Teacher
-Supervisor of Operations
-Health Education Teacher
-Ice Cream Shop Associate
-Process Control Engineer
-Rehabilitation Counselor
-Cemetery Vault Installer
-Smooth Stucco Resurfacer
 Paper Sorter and Counter
 Wire Weaving Loom Setter
 Tower Equipment Repairer
@@ -31141,14 +30896,6 @@ Forest Ecology Professor
 Handbag Frames Inspector
 Staff Research Scientist
 Reaming Machine Operator
-Public Health Nurse (PHN)
-Commissioner of Officials
-Flight Control Specialist
-Off Track Betting Manager
-Speech/Language Therapist
-Knitting Machine Mechanic
-Lean Six Sigma Black Belt
-Radio Interference Expert
 Recycling Program Manager
 Window Trimmer Apprentice
 Street Openings Inspector
@@ -32530,17 +32277,6 @@ New Car Make Ready Worker
 Veterinary Epidemiologist
 Archeology Faculty Member
 Certified Family Mediator
-Forensic Computer Examiner
-Casualty Claims Supervisor
-Cryolite Recovery Operator
-Anesthesiologist/Physician
-Java Programming Professor
-Professor of Biostatistics
-Social Service Coordinator
-Video Production Assistant
-Stringing Machine Operator
-Wage and Salary Specialist
-Artificial Teeth Inspector
 Carpet or Rug Layer Helper
 Microelectronics Assembler
 Internal Affairs Commander
@@ -33801,17 +33537,6 @@ Critical Care Unit Manager
 Terminal Computer Operator
 Clinical Trials Specialist
 Corporate Quality Engineer
-Construction Skills Teacher
-Account Development Manager
-Accounts Payable Specialist
-Char Filter Operator Helper
-Employment Programs Analyst
-Contact Lens Lathe Operator
-Computer Hardware Developer
-Bottom Turning Lathe Turner
-Male Infertility Specialist
-Air Export Operations Agent
-Machine Sweeper Brush Maker
 Wholesale Account Executive
 Varnishing Unit Tool Setter
 Diet Tech (Diet Technician)
@@ -34944,15 +34669,6 @@ Surveillance System Monitor
 Adventure Education Teacher
 Practice or Student Teacher
 Reproduction Machine Loader
-Property Utilization Officer
-Nut Sheller Machine Operator
-Millinery Department Manager
-Control Integration Engineer
-Exterior Interior Specialist
-Employment Services Director
-Chip Mixing Machine Operator
-Information Security Manager
-Sales And Leasing Consultant
 Mainframe Systems Programmer
 Student Services Coordinator
 Warehouse Operations Manager
@@ -36004,12 +35720,6 @@ Electric Vehicle Electrician
 Plastics Engineering Teacher
 Traffic or System Dispatcher
 Environmental Change Analyst
-Amphibious Operations Officer
-Pick-Pulling Machine Operator
-Community Organization Worker
-Tuckpointer, Cleaner, Caulker
-Computer Forensics Technician
-Lead Cytogenetic Technologist
 Health and Safety Coordinator
 Search Advertising Strategist
 Shot Blast Equipment Operator
@@ -36949,20 +36659,6 @@ Solar Installation Supervisor
 Career and Transition Teacher
 Combination Welder Apprentice
 Emergency Response Technician
-Carbonation Equipment Operator
-Grinding and Polishing Laborer
-loan reviewCredit Risk Officer
-Zigzag Tunnel Elastic Operator
-Tele-Grout Sewer Line Repairer
-Child and Adolescent Therapist
-Milk Bottling Machine Operator
-Locomotive Mechanic Apprentice
-Motorcycle Mechanic Apprentice
-Middle School Resource Teacher
-Fisheries Management Biologist
-Personnel Placement Specialist
-Principle Industrial Hygienist
-Marine Engineering Technicians
 customer serviceGear Inspector
 Logistics and Planning Manager
 Heavy Equipment Operator/Paver
@@ -37858,8 +37554,6 @@ Structural Steel Worker Helper
 Pressing Department Supervisor
 Marketing Research Coordinator
 Carbon Furnace Operator Helper
-Diesel Locomotive Firer/Fireman
-Residential Insurance Inspector
 Sales Representative Supervisor
 Research Environmental Engineer
 Continuous Miner Operator (CMO)
@@ -38621,11 +38315,6 @@ Research and Evaluation Manager
 Computer Programming Supervisor
 Bereavement Program Coordinator
 Network Applications Specialist
-Drawing in Machine Tender Helper
-Photographic Equipment Inspector
-Air Conditioner Installer Helper
-Retail Advertising Sales Manager
-Acetylene Cylinder Packing Mixer
 Orthotic/Prosthetic Practitioner
 Fabrication and Layout Craftsman
  and Expediting ClerksBoot Maker
@@ -39247,16 +38936,6 @@ Assistant Professor of Economics
 Stocking and Box Shop Supervisor
 Therapeutic Recreation Assistant
 Manufacturing Technology Analyst
-Respiratory Care Program Director
-Diplomatic Interpreter/Translator
-Director of Quantitative Research
-Grievance and Appeals Coordinator
-Energy Efficiency Finance Manager
-diagnose disordersPhotojournalist
-Special Warfare Combatant Crewman
-Animal Hospital Office Supervisor
-Primary Special Education Teacher
-Administrative Services Assistant
 Automotive Glazier (Auto Glazier)
 Paint Roller Cover Machine Setter
 Predictive Maintenance Specialist
@@ -39837,9 +39516,6 @@ Electrical Engineering Technician
 Compressor Station Chief Engineer
 Environmental Health Technologist
 Certified Nursing Assistant (CNA)
-Hardboard Coating Machine Operator
-Bakery Machine Mechanic Supervisor
-Printed Circuit Board Preassembler
 Manufacturing Technology Professor
 Rehabilitation Program Coordinator
 Certified Professional Coder (CPC)
@@ -40334,11 +40010,6 @@ Residential Air Sealing Technician
 Machine Tool Technician Instructor
 Glass Vial Bending Conveyor Feeder
 Aircraft Quality Control Inspector
-Unattended Ground Sensor Specialist
-Logging WorkersMultiple Coil Winder
-Meter and Regulator Shop Supervisor
-Vice President, Consulting Services
-Production Lapping Machine Operator
  and Mining GreenFitness Instructor
 Special Population Paraprofessional
 Veterinary Laboratory Diagnostician
@@ -40795,8 +40466,6 @@ Fire InspectorsSenior QC Technician
 Radio Television Technical Director
 Electrical Timing Device Calibrator
 Fabrication and Assembly Supervisor
-Landscape and Naval Bagging Salvager
-Injection Molding Process Technician
 Farmworkers and LaborersArt Director
 Naval Aircrewman Tactical Helicopter
 Airplane Flight Attendant Supervisor
@@ -41226,8 +40895,6 @@ Outreach and Education Social Worker
 Power Equipment Mechanics Instructor
 Financial Retirement Plan Specialist
 Child Protective Services Specialist
-Administrative and Program Specialist
-Air Traffic Controller (Tower Option)
 School Library Media Program Director
 Submarine Advisory Team Watch Officer
 Legal Support WorkersTank Car Cleaner
@@ -41542,9 +41209,6 @@ Obstetrics Specialist (OB Specialist)
 Naval Aircrewman (Special Assignment)
 Customer Complaint Service Supervisor
 Material Reprocessing Associate (MRA)
-Animal Breeding and Genetics Professor
-PatternmakersSteel Division Supervisor
-Thread Milling Machine Set Up Operator
 Global Director Air and Climate Change
 Commercial PilotsMotor Grader Operator
 Interrelated Special Education Teacher
@@ -41840,7 +41504,6 @@ Printed Circuit Board Panels Developer
 Learning Support Resource Room Teacher
 Competency Evaluated Nurse Aide (CENA)
 Electric Motor and Generator Assembler
-Labor Relations or Personnel Negotiator
 Search Marketing StrategistsMeat Soaker
 microcontrollersThermodynamics Engineer
  Sales Floor Bright OutlookLead Janitor
@@ -42373,7 +42036,6 @@ Truck, Railroad, and Bus Engine Mechanic
 Special Education TeachersPolice Officer
 Production Gear Cutting Machine Operator
 Echo Tech (Echocardiographic Technician)
-Operating Power Plant Combustion Engineer
 Adjustable Steel Joist Setting Supervisor
 Nuclear EngineersPurchasing Administrator
 Energy Auditors GreenBlast Furnace Helper
@@ -42582,7 +42244,6 @@ Petroleum Refinery Control Panel Operator
 Certified Vision Rehabilitation Therapist
 MH Teacher (Mentally Handicapped Teacher)
 General Information Technology Specialist
-Rehabilitation CounselorsOracleTank Tender
 Religious WorkersJumpbasting Canvas Baster
 Geophysical Data TechniciansDrill Operator
 Large Emergency Storage Battery Maintainer
@@ -42770,7 +42431,6 @@ Financial Responsibility Division Director
 Municipal ClerksSnack Foods Mixer Operator
 Suction Dredge Pipeline Placing Supervisor
 HairdressersElectronics Department Manager
-Methane Capturing System Maintenance Worker
 Chief Technician, X-Ray (Chief Tech, X-Ray)
 Network Intelligence Analyst Superintendent
  Power ToolBlood Donor Recruiter Supervisor
@@ -42957,7 +42617,6 @@ Cook, Cashier, Food Prep (Cafeteria Worker)
 IT Manager (Information Technology Manager)
 Agricultural Establishment Grader Inspector
 Vehicle Maintenance Unit Commanding Officer
-Brownfield and Economic Development Director
 Mine Cutting and Channeling Machine Operator
 Word Processors and TypistsPrize Coordinator
  Except Metal and PlasticSteel Plate Caulker
@@ -43130,7 +42789,6 @@ Neurologists Bright OutlookLivestock Showman
 Advertising Material Distributors Supervisor
 AuditorsOB/GYN (Obstetrician / Gynecologist)
  Except Oil and GasTransit Planning Director
-Clinical Supervisor, Epilepsy Monitoring Unit
 Library and Information Technology Instructor
 Ophthalmologists Bright OutlookGame Attendant
 Assistant Vice President, Investment Analysis
@@ -43267,9 +42925,6 @@ Cable Television Technician (CATV Technician)
 Pharmaceutical Manufacturing Machine Operator
 Pulmonary Function Technician (PF Technician)
 Communications Equipment Operating Technician
-Welding, Brazing, and Burning Machine Repairer
-Security Guards Bright OutlookPiano Case Maker
-Cryptologic Digital Network Technician/Analyst
 Gwot Ia/Ilo Intelligence Support, Not Deployed
  and Rate ClerksSewing Techniques Demonstrator
 Board Certified in Hearing Instrument Sciences
@@ -43389,8 +43044,6 @@ Medical/Surgery Registered Nurse (Med/Surg RN)
 Mine Cutting and Channeling Machine Coal Miner
 Severe Emotional Disorders High School Teacher
 Head Cd Storage and Materials Make-Up Operator
-Radio Television Announcer (Radio TV Announcer)
- BakingChiropractorsMill Tender Second Operator
 Future Farmers of America Advisor (FFA Advisor)
 Marine Equipment Machinery Maintenance Mechanic
 An/Sqq-89(V)15 Sonar System Level II Technician
@@ -43642,8 +43295,6 @@ An/Sqq-89(V)2/9 Active Sonar Level Ii Technician
 Refuse and Recyclable Material CollectorsPronger
 Training and Development ManagersMattress Weaver
 Material Handling Equipment Sales Representative
-Geodetic Surveyors Bright OutlookStator Connector
-CPS Team Lead (Chip Placement Solution Team Lead)
 Mildly Disabled Student Special Education Teacher
 Teacher of Students with Visual Impairments (TVI)
 EKG/ECG Technician (Electrocardiogram Technician)
@@ -43770,7 +43421,6 @@ Information Technology Specialist (IT Specialist)
 Certified Occupational Rehabilitation Aide (CORA)
 Electrical Engineering TechniciansBearing Grinder
 Information Technology Generalist (IT Generalist)
-Equal Employment Opportunity Officer (EEO Officer)
 Commercial, Residential, or Industrial Housekeeper
 Sports Medicine PhysiciansProfessor of Archaeology
 Nonsurgical Primary Care Sports Medicine Physician
@@ -43897,8 +43547,6 @@ Certified Biomedical Engineering Technician (CBET)
  Government ProgramsCooperative Education Director
 Aircraft Launching and Arresting Systems Inspector
 Erosion Control Design and Installation Contractor
-First-Line Supervisors of Logging WorkersSkin Drier
- and Tamping Equipment OperatorsProduct Safety Lead
 Automobile Seat Cover and Convertible Top Installer
 Bottles and Bottling Equipment Sales Representative
 An/Sqq-89(V)2/(V)9 Sonar Subsystem Level I Operator
@@ -44207,7 +43855,6 @@ Physical Therapist Technician (Physical Therapy Tech)
 Aerospace Control And Warning Systems, Manuel Systems
 OD Grinder Operator (Outer Diameter Grinder Operator)
 Criminal and Patrol Division Commander Deputy Sheriff
-Information Technology Systems Director (ITS Director)
 play therapyAutomated Equipment Engineering Technician
 EMT/Paramedic (Emergency Medical Technician/Paramedic)
 Radiologic Technicians Bright OutlookFast Food Cashier
@@ -44396,8 +44043,6 @@ Community Health WorkersMultimedia Production Assistant
  Theatrical and PerformanceStrike Planning Applications
 Loss Prevention Managers Bright OutlookChimney Repairer
 Automotive Service Technicians and MechanicsTax Manager
-EMT/Dispatcher (Emergency Medical Technician/Dispatcher)
- and Expediting Clerks GreenPlastic Die Maker Apprentice
 Mild and Moderate Disabilities Special Education Teacher
 Set-Up Workers, Motion Picture Sets, Studios, and Stages
 Biological Science TeachersUniversity Relations Director
@@ -44830,7 +44475,6 @@ International Health Director (Health Science Administration)
 IT Business Analyst (Information Technology Business Analyst)
 Navy Command And Control System (Nccs) Ashore System/Operator
 Fraud ExaminersESL Tutor (English as a Second Language Tutor)
-Pile-Driver Operators Bright OutlookMechanical Shovel Operator
 Dental and Medical Equipment and Supplies Sales Representative
 Distributive Education Clubs of America Advisor (DECA Advisor)
 Instrument, Control and Electrical Technician (ICE Technician)
@@ -45070,7 +44714,6 @@ Adapted Physical Education or Adapted Physical Activity Specialist
 PhotoshopPhysical Education Department Chair (PE Department Chair)
 Geographic Information Systems Faculty Member (GIS Faculty Member)
 Chief Medical Officer, Naturopathic Endocrinologist and Oncologist
-PaintersSalesforce.com Salesforce CRMEar Mold Laboratory Technician
 Ophthalmic Medical Technicians Bright OutlookPet Adoption Counselor
 Wolfram Research Mathematica UnRisk Pricing EngineCold Strip Feeder
  Except Hydrologists and GeographersCutting Machine Operator Helper
@@ -45188,7 +44831,6 @@ Healthcare Social Workers Bright OutlookTruck Trailer Final Inspector
 Veterinary Technologists and Technicians Bright OutlookRadio Recorder
 Bachelor of Social Work Program Coordinator (BSW Program Coordinator)
 TMD Teacher Assistant (Trainable Mentally Disabled Teacher Assistant)
-Media and Communication Equipment WorkersCasing Running Machine Tender
 Entertainment Attendants and Related WorkersProsthetic Makeup Designer
 Community Health Program Representative (Community Health Program Rep)
 Equal Opportunity Representatives and OfficersCigarette Machine Filler
@@ -45323,7 +44965,6 @@ Remote Sensing Scientists and Technologists GreenTerrazzo Finisher Helper
 Business Operations Specialistsrisk analysisReed or Wind Instrument Tuner
 Supervisory Information Technology Specialist (Supervisory IT Specialist)
 Veterinary Assistants and Laboratory Animal CaretakersInternet Consultant
-Hazard Analysis and Critical Control Point Coordinator (HACCP Coordinator)
 Geographic Information Systems Technicians GreenElectronic Science Teacher
 EMT Ambulance Attendant (Emergency Medical Technician Ambulance Attendant)
 American Sign Language ASL/English Sign Language Interpreter/RID Certified
@@ -45366,7 +45007,6 @@ Telemation e-CRMAircraft Maintenance Technician (Aircraft Maintenance Tech)
 Storage and Distribution ManagersCommunications Equipment Repair Technician
 Nanotechnology Engineering Technicians Bright Outlook GreenSinger (Burning)
 Geographic Information Systems TechniciansCompensation and Benefits Analyst
-Heavy and Tractor-Trailer Truck DriversHazardous Waste Management Specialist
 Lead Pharmacy Tech, Certified Pharmacy Technician (Lead Pharmacy Tech, CPhT)
 An/Sys-2 Integrated Automatic Detection And Tracking (IADT) Systems Operator
 Alternative Fuel Vehicle Maintenance Technician (AFV Maintenance Technician)
@@ -45640,7 +45280,6 @@ Technical Surveillance Countermeasures Trained Counterintelligence/Human Source 
 Joint Tactical Ground Station (Jtags)/Multi-Mission Mobile Processor (M3p) System Operator/Maintainer
 Brownfield Redevelopment Specialists and Site Managers Bright OutlookWildland Fire Fighter Specialist
 Software Quality Assurance Engineers and Testers Bright Outlookchemotherapy administrationStone Paver
-Manager, Neurodiagnostic Laboratory & Epilepsy Center (Manager, Neurodiagnostic Lab & Epilepsy Center)
 First-Line Supervisors of Transportation and Material-Moving Machine and Vehicle OperatorsGold Stamper
 Emergency Medical Technicians and ParamedicsGeneral and Operations Managers GreenAssistant Film Editor
 Magnetic Resonance Imaging Technologists Bright OutlookSolar Hot Water Heater Manufacturing Technician
