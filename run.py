@@ -72,8 +72,9 @@ class DigitalOceanManager(object):
 						'scp -o "StrictHostKeyChecking no" install.sh root@%s:install.sh' % ip_address, #--sends the install.sh
 						'ssh -o "StrictHostKeyChecking no" -t root@%s bash install.sh %s %s' % (ip_address, self.country, self.master_node) #--runs the install.sh on slave
 						]
-			execute = call([command[0]], shell=True)
-			p = Popen(command[1], shell=True, stdout=PIPE, stderr=STDOUT, bufsize=1, close_fds=True)
+			execute = call([commands[0]], shell=True)
+			p = Popen(commands[1], shell=True, stdout=PIPE, stderr=STDOUT, bufsize=1, close_fds=True)
+			print p, droplet.name
 			#for command_ in commands:
 			#	execute = subprocess.call([command_], shell=True)
 		con.close()
