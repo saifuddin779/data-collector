@@ -1,0 +1,1 @@
+configs = {'skills_file': 'SKILLS_ROUND_A'}

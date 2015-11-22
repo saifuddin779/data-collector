@@ -1,0 +1,89 @@
+{
+  'name': 'Beth Roch',
+  'title': 'Experienced Caregiver',
+  'skills': [
+    'Credentialing Software (6 years) ',
+    ' Excel (10+ years) ',
+    ' Microsoft Office (10+ years) ',
+    ' Customer Service (10+ years) ',
+    ' Patient Counseling (8 years) ',
+    ' Insurance Verifications (10+ years) ',
+    ' Prior Authorizations (10+ years) ',
+    ' Physician Credentialing (5 years) ',
+    ' Claim audit & reconciliations (8 years) ',
+    ' Insurance Authorizations (10+ years)'
+  ],
+  'timestamp': 1445900589.014712,
+  'time_taken': 0.021727800369262695,
+  'workExperience': {
+    'data': [
+      {
+        '.work_company': 'Amazon Artificial Intelligence',
+        '.work_title': 'Independent Contractor',
+        '.work_location': 'Amazon Artificial Intelligence',
+        '.work_dates': 'November 2013 to Present',
+        '.work_description': 'Mechanical Turker Human Intelligence Tasks, (HITS) consisting of: Data Entry, Transcription, Internet Research, Proof    Reading and more.'
+      },
+      {
+        '.work_company': 'Robert Half/Office Team ',
+        '.work_title': 'Credentialing Coordinator',
+        '.work_location': ' Cincinnati, OH',
+        '.work_dates': 'January 2015 to September 2015',
+        '.work_description': "Developing, Organizing and Maintaining the Credentialing Department, following current guidelines and laws, for multiple companies. Accomplishments include; organizing and developing spreadsheets for tracking workflow of credentialing applications and processes. Building the OneApp Credentialing Database with physician information. Maintaining physicians profile via CAQH/Proview, commercial insurance carriers and affiliated hospitals. Assisted new provider's initiate the credentialing process with commercial carriers and hospitals.  Other administrative duties as assigned."
+      },
+      {
+        '.work_company': 'Amazon Artificial Intelligence ',
+        '.work_title': 'Home Instead Senior Care', 
+        '.work_location': ' Florence, KY',
+        '.work_dates': 'August 2014 to January 2015',
+        '.work_description': "41042 Caregiver Providing non-medical companionship and home care services to help senior remain at home for as long as possible. Duties include: Housekeeping, meal preparation, errands and incidental transportation, medication reminders, laundry, bathing and toileting assistance and personal care. Obtained company certifications in Alzheimer's and   Dementia clients."
+      },
+      {
+        '.work_company': 'The Christ Hospital ',
+        '.work_title': 'Medical Staff Coordinator',
+        '.work_location': ' Cincinnati, OH',
+        '.work_dates': 'December 2010 to March 2011',
+        '.work_description': 'Responsibilities included preparing and maintaining reports and summaries of credentialing activities such as,    accreditation, membership and facility privileges, ensuring that all information meets JC regulations, hospital    bylaws  and credentialing policies and procedures. Maintenance of  FPPE/OPPE records. Other administrative duties    as needed.   studying for my CPCS certification, via NAMSS and a local chapter support/study group.'
+      },
+      {
+        '.work_company': 'Self',
+        '.work_title': 'Private Contractor',
+        '.work_location': ' Cincinnati, OH',
+        '.work_dates': 'December 2009 to November 2010',
+        '.work_description': 'Billing/Credentialing Coordinator Home Based Business Contracted, on a private basis, with a Practical Clinical Counselor, to begin the credentialing process for her newly opened private practice.'
+      },
+      {
+        '.work_company': 'The Family Medical Group, LLC ',
+        '.work_title': 'Benefit/Credentialing Coordinator',
+        '.work_location': ' Cincinnati, OH',
+        '.work_dates': 'November 2006 to November 2010',
+        '.work_description': 'Developing, Organizing and Maintaining the Credentialing Department for eighteen practitioners. Additionally responsible for; authorizations for outpatient procedures, insurance authorizations and referrals, medication authorizations and counseling patients on current insurance guidelines and alternative funding methods for outpatient procedures and medications.  Audits on claims for accuracy accordingly to our set Fee Schedules. Claim reconciliations. Submission and follow-up for Medicare and secondary claims.  Began studying for my CPCS certification, in 2010, via NAMSS. Served as a member of the employee council.'
+      },
+      {
+        '.work_company': 'Medical Recovery System ',
+        '.work_title': 'Account Specialist',
+        '.work_location': ' Cincinnati, OH',
+        '.work_dates': 'August 2006 to November 2006',
+        '.work_description': "This position was based at Cincinnati Children's Hospital Medical Center, and was temporary.  I was responsible for maintaining the Medicare and Medicaid accounts for the DME department, including, insurance verifications, ordering supplies, billing with appropriate CPT and ICD-9 codes and follow-up of those accounts.  Maintaining and submitting weekly and monthly reports to the department lead for accurate accountability."
+      },
+      {
+        '.work_company': 'Miami Heights Chiropractic Center, Inc ',
+        '.work_title': 'Chiropractic Assistant',
+        '.work_location': ' Cincinnati, OH',
+        '.work_dates': 'September 2001 to August 2006',
+        '.work_description': "Responsibilities included patient relations, patient education, scheduling and organizing lectures affiliated with the Doctors' Speakers Bureau, patient scheduling, answering and directing phone calls, filing, maintaining patient files with current personal information, data entry, basic health insurance paperwork, insurance verification and coverage limits, Medicare billing, Medical Necessity Reports, X-ray Reports, Workman's Compensation paperwork along with various other office duties.  Obtained certification for a Chiropractic Assistant through independent study and attending seminars affiliated with David Singer Enterprises in 2005."
+      }
+    ]
+  },
+  'address': 'Fort Mitchell, KY',
+  'education': {
+    'data': [
+      {
+        '.edu_school': 'Empire Beauty School - Florence, KY',
+        '.edu_dates': 'September 2011 to June 2012',
+        '.edu_title': ''
+      }
+    ]
+  },
+  'additional_info': ''
+}

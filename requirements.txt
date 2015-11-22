@@ -1,0 +1,6 @@
+requests
+redis
+uwsgi
+flask
+pyquery
+skiff
