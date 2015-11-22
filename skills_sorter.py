@@ -17,7 +17,7 @@ def sorter(start, end):
 	for a in f:
 		y.append(a)
 	f.close()
-
+	
 	#call and get the count
 	for i, each in enumerate(y[start:end]):
 		keyword = each.strip('\n')
