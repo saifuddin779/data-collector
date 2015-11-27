@@ -91,7 +91,7 @@ def get_skills_count(file_name):
 		i += 1
 	f.close()
 	return i
-
+ 
 def country_count(country):
 	g = r_master.get(country)
 	if not g:

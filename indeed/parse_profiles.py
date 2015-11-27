@@ -23,7 +23,7 @@ class indeed_resumes(object):
 		self.fixed_test_url = 'http://www.indeed.com/resumes?q=excel&co='+self.country_code
 		self.url_ = 'http://www.indeed.com/resumes%s'
 		self.user_agents_cycle = cycle(user_agents)
-		self.r_master = redis.StrictRedis(host=self.master, port='6379')
+		#self.r_master = redis.StrictRedis(host=self.master, port='6379')
 		self.n_all = 0
 
 	def init_redis(self):
@@ -40,17 +40,27 @@ class indeed_resumes(object):
 		init_url = self.init_url % (keyword.replace(' ', '+'), 0, 50)
 		filtering_urls = self.get_filter_urls(init_url)
 
-		if not filtering_urls:
-			check = self.get_filter_urls(self.fixed_test_url)
-			if not check:
-				#--do a plain check with a regular, simple keyword like ms excel
-				#--if that keyword also results in nothing, then you are blocked.
-				#--simply send the database, update the droplet name to master, and exit and master will destroy you.
-				print 'THE CONDITION IS HERE..'
-				self.send_to_master()
-				self.r_master.hset('droplets', socket.gethostname(),  True)
-				print 'sent db to master...terminating..'
-				sys.exit()
+		# if not filtering_urls:
+		# 	check = self.get_filter_urls(self.fixed_test_url)
+		# 	n_tries = 0
+		# 	for i in range(10):
+		# 		check = self.get_filter_urls(self.fixed_test_url)
+		# 		if not check:
+		# 			sleep(100)
+		# 			continue
+		# 		else:
+		# 			break
+
+		# 	if not check:
+		# 		#--do a plain check with a regular, simple keyword like ms excel
+		# 		#--if that keyword also results in nothing, then you are blocked.
+		# 		#--simply send the database, update the droplet name to master, and exit and master will destroy you.
+		# 		print 'THE CONDITION IS HERE..SLEEPING BEFORE SENDING..'
+		# 		sleep(100)
+		# 		self.send_to_master()
+		# 		#self.r_master.hset('droplets', socket.gethostname(),  True)
+		# 		print 'sent db to master...terminating..'
+		# 		sys.exit()
 		
 		for route in filtering_urls:
 			url_ = self.url_ % pq_(route).children('a').attr('href')
@@ -100,15 +110,33 @@ class indeed_resumes(object):
 				print str(e)
 				slp(100)
 				pass
-		if resp.status_code == 200:
+		if resp.status_code == 200 and len(self.get_static_resource(self.fixed_test_url)):
 			filtering_urls = pq_(resp.text)
 			filtering_urls = filtering_urls('.refinement')
 			return filtering_urls
 		else:
-			return filtering_urls
+			return self.get_filter_urls(init_url)
 	
 
 	def get_resource(self, url_):
+		data = []
+		resp = None
+		while not resp:
+			try:
+				user_agent = self.user_agents_cycle.next()
+				resp = requests.get(url_, headers = {'user_agent': user_agent})
+			except Exception, e:
+				print str(e)
+				slp(100)
+				pass
+		if resp.status_code == 200 and len(self.get_static_resource(self.fixed_test_url)):
+			data = pq_(resp.text)
+			data = data('#results').children()
+			return data
+		else:
+			return self.get_resource(url_)
+
+	def get_static_resource(self, url):
 		data = []
 		resp = None
 		while not resp:
