@@ -100,8 +100,6 @@ class indeed_resumes(object):
 	
 
 	def get_filter_urls(self, init_url):
-		n_tries = 0
-		max_n_tries = 999
 		try:
 			filtering_urls = []
 			resp = None
@@ -118,22 +116,18 @@ class indeed_resumes(object):
 				filtering_urls = filtering_urls('.refinement')
 				return filtering_urls
 			else:
-				n_tries += 1
-				if n_tries > max_n_tries - 1:
-					return []
-				else:
-					try:
-						return self.get_filter_urls(init_url)
-					except RuntimeError:
-						slp(200)
-						return []
+				slp(300)
+				return []
+				# try:
+				# 	return self.get_filter_urls(init_url)
+				# except RuntimeError:
+				# 	slp(200)
+				# 	return []
 		except RuntimeError:
 			slp(300)
 			return []
 
 	def get_resource(self, url_):
-		n_tries = 0
-		max_n_tries = 999
 		try:
 			data = []
 			resp = None
@@ -150,15 +144,11 @@ class indeed_resumes(object):
 				data = data('#results').children()
 				return data
 			else:
-				n_tries += 1
-				if n_tries > max_n_tries - 1:
+				try:
+					return self.get_resource(url_)
+				except RuntimeError:
+					slp(300)
 					return []
-				else:
-					try:
-						return self.get_resource(url_)
-					except RuntimeError:
-						slp(200)
-						return []
 		except RuntimeError:
 			slp(300)
 			return []
