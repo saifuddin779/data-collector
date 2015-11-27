@@ -116,7 +116,11 @@ class indeed_resumes(object):
 				filtering_urls = filtering_urls('.refinement')
 				return filtering_urls
 			else:
-				return self.get_filter_urls(init_url)
+				try:
+					return self.get_filter_urls(init_url)
+				except RuntimeError:
+					slp(200)
+					return []
 		except RuntimeError:
 			slp(300)
 			return []
@@ -138,7 +142,11 @@ class indeed_resumes(object):
 				data = data('#results').children()
 				return data
 			else:
-				return self.get_resource(url_)
+				try:
+					return self.get_resource(url_)
+				except RuntimeError:
+					slp(200)
+					return []
 		except RuntimeError:
 			slp(300)
 			return []
@@ -164,7 +172,7 @@ class indeed_resumes(object):
 	
 	def begin(self):
 		sorts = ['sort=date', '']
-		keywords_done_idx = 35
+		keywords_done_idx = 0
 		#keywords_done_idx = self.r_master.get(self.country_code) #--this over here should talk to master's redis
 		print 'starting from %s' % str(keywords_done_idx)
 		if not keywords_done_idx:
