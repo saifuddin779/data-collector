@@ -108,7 +108,7 @@ class indeed_resumes(object):
 					user_agent = self.user_agents_cycle.next()
 					resp = requests.get(init_url, headers = {'user_agent': user_agent})
 				except Exception, e:
-					print str(e)
+					print str(e), '###'
 					slp(100)
 					pass
 			if resp.status_code == 200 and len(self.get_static_resource(self.fixed_test_url)):
@@ -130,7 +130,7 @@ class indeed_resumes(object):
 					user_agent = self.user_agents_cycle.next()
 					resp = requests.get(url_, headers = {'user_agent': user_agent})
 				except Exception, e:
-					print str(e)
+					print str(e), '@@@'
 					slp(100)
 					pass
 			if resp.status_code == 200 and len(self.get_static_resource(self.fixed_test_url)):
