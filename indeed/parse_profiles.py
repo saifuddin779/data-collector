@@ -142,7 +142,7 @@ class indeed_resumes(object):
 		while not resp:
 			try:
 				user_agent = self.user_agents_cycle.next()
-				resp = requests.get(url_, headers = {'user_agent': user_agent})
+				resp = requests.get(url, headers = {'user_agent': user_agent})
 			except Exception, e:
 				print str(e)
 				slp(100)
