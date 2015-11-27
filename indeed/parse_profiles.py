@@ -121,7 +121,8 @@ class indeed_resumes(object):
 				except RuntimeError:
 					slp(200)
 					return []
-		except RuntimeError:
+		except RuntimeError, e:
+			print str(e), 'fff'
 			slp(300)
 			return []
 
@@ -147,7 +148,8 @@ class indeed_resumes(object):
 				except RuntimeError:
 					slp(200)
 					return []
-		except RuntimeError:
+		except RuntimeError, e:
+			print str(e), 'sssd'
 			slp(300)
 			return []
 
