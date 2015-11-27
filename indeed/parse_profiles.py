@@ -157,7 +157,8 @@ class indeed_resumes(object):
 	
 	def begin(self):
 		sorts = ['sort=date', '']
-		keywords_done_idx = self.r_master.get(self.country_code) #--this over here should talk to master's redis
+		keywords_done_idx = 0
+		#keywords_done_idx = self.r_master.get(self.country_code) #--this over here should talk to master's redis
 		print 'starting from %s' % str(keywords_done_idx)
 		if not keywords_done_idx:
 			keywords_done_idx = -1
@@ -171,7 +172,7 @@ class indeed_resumes(object):
 			else:
 				for sort in sorts:
 					self.resource_collection(keyword, sort)
-				self.r_master.set(self.country_code, i)
+				#self.r_master.set(self.country_code, i)
 		self.send_to_master()
 		self.r_master.hset('droplets', socket.gethostname(),  True)
 		print 'sent db to master...terminating..'
