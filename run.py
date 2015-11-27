@@ -118,6 +118,7 @@ if __name__ == '__main__':
 			time.sleep(60)
 		print 'destroying %s ..' % droplet.name
 		obj.destroy(droplet)
+		time.sleep(100)
 
 
 

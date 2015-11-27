@@ -19,29 +19,24 @@ class indeed_resumes(object):
 		self.country_code = country_code
 		self.master = master
 		self.keywords = open(skillset+'.json', 'rb')
-		#self.keywords = ['mongo', 'python', 'sql']
 		self.init_url = 'http://www.indeed.com/resumes?q=%s&co='+self.country_code+'&start=%d&limit=%d'
 		self.fixed_test_url = 'http://www.indeed.com/resumes?q=excel&co='+self.country_code
 		self.url_ = 'http://www.indeed.com/resumes%s'
 		self.user_agents_cycle = cycle(user_agents)
 		self.r_master = redis.StrictRedis(host=self.master, port='6379')
 		self.n_all = 0
-	
 
 	def init_redis(self):
 		if not self.r_host.get('all_count'):
 			self.r_host.set('all_count', 0)
 		return
-	
 
 	def resource_collection(self, keyword, sort, rest_kewords=False):
 		start_time = tm()
-		print keyword
 		n_profiles = {}
 		keyword = '%s' % keyword.replace('/', ' ')
 		keyword = keyword.strip('\n')
-		
-		#init_url = self.init_url % (keyword.replace(' ', '+'), self.location.replace(' ', '+'), 0, 50)
+
 		init_url = self.init_url % (keyword.replace(' ', '+'), 0, 50)
 		filtering_urls = self.get_filter_urls(init_url)
 
@@ -86,7 +81,7 @@ class indeed_resumes(object):
 				db_insert_hash(n_profiles, self.country_code)
 			print 'inserted %d records to db.. %s' % (len(n_profiles), keyword)	
 			n_profiles = {}
-			slp(3) #--sleeping for 2 secs for every filter for not making calls too fast and get blocked quickly
+			slp(2) #--sleeping for 2 secs for every filter for not making calls too fast and get blocked quickly
 			gc.collect()
 		gc.collect()
 		current_time = tm()
@@ -99,12 +94,11 @@ class indeed_resumes(object):
 		resp = None
 		while not resp:
 			try:
-				#user_agent = ''.join(random.choice(string.ascii_lowercase + string.digits) for _ in range(10))
 				user_agent = self.user_agents_cycle.next()
 				resp = requests.get(init_url, headers = {'user_agent': user_agent})
 			except Exception, e:
 				print str(e)
-				slp(5)
+				slp(100)
 				pass
 		if resp.status_code == 200:
 			filtering_urls = pq_(resp.text)
@@ -123,7 +117,7 @@ class indeed_resumes(object):
 				resp = requests.get(url_, headers = {'user_agent': user_agent})
 			except Exception, e:
 				print str(e)
-				slp(5)
+				slp(100)
 				pass
 		if resp.status_code == 200:
 			data = pq_(resp.text)

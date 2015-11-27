@@ -5,14 +5,10 @@ import requests
 from pyquery import PyQuery as pq_
 from indeed.user_agents import user_agents
 
-
-
-
 user_agents_cycle = cycle(user_agents)
 
 def sorter(start, end):
 	final = []
-
 	##get the file contents
 	f = open('indeed/SKILLS_ROUND_A.json', 'rb')
 	y = []

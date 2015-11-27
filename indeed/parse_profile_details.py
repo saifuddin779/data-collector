@@ -202,12 +202,13 @@ def scrap_profiles(load_done=False):
 	return
 
 
-
-
-
-
 if __name__ == '__main__':
-	scrap_profiles()
+	obj = indeed_resumes_details('c3a2e69dd2e2ea83')
+	data = obj.resource_collection()
+	print data
+
+	#scrap_profiles()
+	
 	# get_distincts()
 	# save_distincts()
 	# get_ids()
