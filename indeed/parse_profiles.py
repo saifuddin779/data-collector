@@ -156,20 +156,23 @@ class indeed_resumes(object):
 	def get_static_resource(self, url):
 		data = []
 		resp = None
-		while not resp:
-			try:
-				user_agent = self.user_agents_cycle.next()
-				resp = requests.get(url, headers = {'user_agent': user_agent})
-			except Exception, e:
-				print str(e)
-				slp(100)
-				pass
-		if resp.status_code == 200:
-			data = pq_(resp.text)
-			data = data('#results').children()
-			return data
-		else:
-			return data
+		try:
+			while not resp:
+				try:
+					user_agent = self.user_agents_cycle.next()
+					resp = requests.get(url, headers = {'user_agent': user_agent})
+				except Exception, e:
+					print str(e)
+					slp(100)
+					pass
+			if resp.status_code == 200:
+				data = pq_(resp.text)
+				data = data('#results').children()
+				return data
+			else:
+				return data
+		except RuntimeError:
+			return []
 
 	
 	def begin(self):
