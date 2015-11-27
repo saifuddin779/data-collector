@@ -100,41 +100,48 @@ class indeed_resumes(object):
 	
 
 	def get_filter_urls(self, init_url):
-		filtering_urls = []
-		resp = None
-		while not resp:
-			try:
-				user_agent = self.user_agents_cycle.next()
-				resp = requests.get(init_url, headers = {'user_agent': user_agent})
-			except Exception, e:
-				print str(e)
-				slp(100)
-				pass
-		if resp.status_code == 200 and len(self.get_static_resource(self.fixed_test_url)):
-			filtering_urls = pq_(resp.text)
-			filtering_urls = filtering_urls('.refinement')
-			return filtering_urls
-		else:
-			return self.get_filter_urls(init_url)
-	
+		try:
+			filtering_urls = []
+			resp = None
+			while not resp:
+				try:
+					user_agent = self.user_agents_cycle.next()
+					resp = requests.get(init_url, headers = {'user_agent': user_agent})
+				except Exception, e:
+					print str(e)
+					slp(100)
+					pass
+			if resp.status_code == 200 and len(self.get_static_resource(self.fixed_test_url)):
+				filtering_urls = pq_(resp.text)
+				filtering_urls = filtering_urls('.refinement')
+				return filtering_urls
+			else:
+				return self.get_filter_urls(init_url)
+		except RuntimeError:
+			slp(300)
+			return []
 
 	def get_resource(self, url_):
-		data = []
-		resp = None
-		while not resp:
-			try:
-				user_agent = self.user_agents_cycle.next()
-				resp = requests.get(url_, headers = {'user_agent': user_agent})
-			except Exception, e:
-				print str(e)
-				slp(100)
-				pass
-		if resp.status_code == 200 and len(self.get_static_resource(self.fixed_test_url)):
-			data = pq_(resp.text)
-			data = data('#results').children()
-			return data
-		else:
-			return self.get_resource(url_)
+		try:
+			data = []
+			resp = None
+			while not resp:
+				try:
+					user_agent = self.user_agents_cycle.next()
+					resp = requests.get(url_, headers = {'user_agent': user_agent})
+				except Exception, e:
+					print str(e)
+					slp(100)
+					pass
+			if resp.status_code == 200 and len(self.get_static_resource(self.fixed_test_url)):
+				data = pq_(resp.text)
+				data = data('#results').children()
+				return data
+			else:
+				return self.get_resource(url_)
+		except RuntimeError:
+			slp(300)
+			return []
 
 	def get_static_resource(self, url):
 		data = []
