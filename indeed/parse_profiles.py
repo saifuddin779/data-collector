@@ -168,8 +168,7 @@ class indeed_resumes(object):
 						print 'putting to sleep for 10 mins because last 4 keywords went nill and check indicated block..'
 						print 'currently worked at .. %d' % i
 						slp(600)
-
-
+						
 				#self.r_master.set(self.country_code, i)
 		#self.send_to_master()
 		#self.r_master.hset('droplets', socket.gethostname(),  True)
