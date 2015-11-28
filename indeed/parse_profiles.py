@@ -70,7 +70,7 @@ class indeed_resumes(object):
 				db_insert_hash(n_profiles, self.country_code)
 			print 'inserted %d records to db.. %s, %d' % (len(n_profiles), keyword, keyword_index)	
 			n_profiles = {}
-			slp(3) #--sleeping for 2 secs for every filter for not making calls too fast and get blocked quickly
+			slp(2) #--sleeping for 2 secs for every filter for not making calls too fast and get blocked quickly
 			gc.collect()
 		gc.collect()
 		current_time = tm()
@@ -98,7 +98,7 @@ class indeed_resumes(object):
 			filtering_urls = filtering_urls('.refinement')
 			return filtering_urls
 		else:
-			slp(5)
+			#slp(5)
 			return self.get_filter_urls(init_url, counter+1)
 
 	def get_resource(self, url_, counter):
@@ -120,7 +120,7 @@ class indeed_resumes(object):
 			data = data('#results').children()
 			return data
 		else:
-			slp(5)
+			#slp(0)
 			return self.get_resource(url_, counter+1)
 
 	def get_static_resource(self, url):
