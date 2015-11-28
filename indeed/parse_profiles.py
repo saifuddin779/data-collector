@@ -73,7 +73,7 @@ class indeed_resumes(object):
 					beg = end
 					end = end+100
 				postfix = '&start=%d&limit=%d&radius=100&%s&co=%s' % (beg, end, sort, self.country_code)	
-				data = self.get_resource(url_+postfix)
+				data = self.get_resource(url_+postfix, 0)
 				if not data:
 					check = self.get_resource(self.fixed_test_url, 0)
 					if not check:
