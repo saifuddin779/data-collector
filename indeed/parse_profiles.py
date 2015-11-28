@@ -23,7 +23,7 @@ class indeed_resumes(object):
 		self.fixed_test_url = 'http://www.indeed.com/resumes?q=excel&co='+self.country_code
 		self.url_ = 'http://www.indeed.com/resumes%s'
 		self.user_agents_cycle = cycle(user_agents)
-		self.max_recursion_depth = 800
+		self.max_recursion_depth = 50
 		#self.r_master = redis.StrictRedis(host=self.master, port='6379')
 		self.n_all = 0
 
@@ -37,32 +37,8 @@ class indeed_resumes(object):
 		n_profiles = {}
 		keyword = '%s' % keyword.replace('/', ' ')
 		keyword = keyword.strip('\n')
-		print keyword, '##~~'
 		init_url = self.init_url % (keyword.replace(' ', '+'), 0, 50)
 		filtering_urls = self.get_filter_urls(init_url, 0)
-		print 'filtering urls here...'
-
-		# if not filtering_urls:
-		# 	check = self.get_filter_urls(self.fixed_test_url)
-		# 	n_tries = 0
-		# 	for i in range(10):
-		# 		check = self.get_filter_urls(self.fixed_test_url)
-		# 		if not check:
-		# 			sleep(100)
-		# 			continue
-		# 		else:
-		# 			break
-
-		# 	if not check:
-		# 		#--do a plain check with a regular, simple keyword like ms excel
-		# 		#--if that keyword also results in nothing, then you are blocked.
-		# 		#--simply send the database, update the droplet name to master, and exit and master will destroy you.
-		# 		print 'THE CONDITION IS HERE..SLEEPING BEFORE SENDING..'
-		# 		sleep(100)
-		# 		self.send_to_master()
-		# 		#self.r_master.hset('droplets', socket.gethostname(),  True)
-		# 		print 'sent db to master...terminating..'
-		# 		sys.exit()
 		
 		for route in filtering_urls:
 			url_ = self.url_ % pq_(route).children('a').attr('href')
@@ -75,11 +51,11 @@ class indeed_resumes(object):
 					end = end+100
 				postfix = '&start=%d&limit=%d&radius=100&%s&co=%s' % (beg, end, sort, self.country_code)	
 				data = self.get_resource(url_+postfix, 0)
-				if not data:
-					check = self.get_resource(self.fixed_test_url, 0)
-					if not check:
-						slp(200)
-						continue
+				#if not data:
+				#	check = self.get_resource(self.fixed_test_url, 0)
+				#	if not check:
+				#		slp(200)
+				#		continue
 				
 				for each in data:
 					item = pq_(each)
@@ -94,7 +70,7 @@ class indeed_resumes(object):
 				db_insert_hash(n_profiles, self.country_code)
 			print 'inserted %d records to db.. %s, %d' % (len(n_profiles), keyword, keyword_index)	
 			n_profiles = {}
-			slp(2) #--sleeping for 2 secs for every filter for not making calls too fast and get blocked quickly
+			slp(3) #--sleeping for 2 secs for every filter for not making calls too fast and get blocked quickly
 			gc.collect()
 		gc.collect()
 		current_time = tm()
@@ -103,11 +79,10 @@ class indeed_resumes(object):
 	
 
 	def get_filter_urls(self, init_url, counter):
-		print counter, 'filter', init_url
 		if counter >= self.max_recursion_depth:
 			print 'max recursion depth achieved in the get_filter_urls'
 			return []
-		#try:
+		
 		filtering_urls = []
 		resp = None
 		while not resp:
@@ -123,18 +98,13 @@ class indeed_resumes(object):
 			filtering_urls = filtering_urls('.refinement')
 			return filtering_urls
 		else:
-			counter += 1
-			return self.get_filter_urls(init_url, counter)
-		# except RuntimeError:
-		# 	slp(300)
-		# 	return []
+			slp(10)
+			return self.get_filter_urls(init_url, counter+1)
 
 	def get_resource(self, url_, counter):
-		print counter,'resource', url_
 		if counter >= self.max_recursion_depth:
 			print 'max recursion depth achieved in the get_resource'
 			return []
-		#try:
 		data = []
 		resp = None
 		while not resp:
@@ -146,17 +116,12 @@ class indeed_resumes(object):
 				slp(100)
 				pass
 		if resp.status_code == 200 and len(self.get_static_resource(self.fixed_test_url)):
-			print 'resource successfull'
 			data = pq_(resp.text)
 			data = data('#results').children()
 			return data
 		else:
-			slp(100)
-			counter += 1
-			return self.get_resource(url_, counter)
-		# except RuntimeError:
-		# 	slp(300)
-		# 	return []
+			slp(10)
+			return self.get_resource(url_, counter+1)
 
 	def get_static_resource(self, url):
 		data = []
