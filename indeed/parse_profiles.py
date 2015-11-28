@@ -23,7 +23,7 @@ class indeed_resumes(object):
 		self.fixed_test_url = 'http://www.indeed.com/resumes?q=excel&co='+self.country_code
 		self.url_ = 'http://www.indeed.com/resumes%s'
 		self.user_agents_cycle = cycle(user_agents)
-		self.max_n_tries = 50
+		self.max_recursion_depth = 800
 		#self.r_master = redis.StrictRedis(host=self.master, port='6379')
 		self.n_all = 0
 
@@ -32,20 +32,14 @@ class indeed_resumes(object):
 			self.r_host.set('all_count', 0)
 		return
 
-	def resource_collection(self, keyword, sort, rest_kewords=False):
+	def resource_collection(self, keyword_index, keyword, sort, rest_kewords=False):
 		start_time = tm()
 		n_profiles = {}
 		keyword = '%s' % keyword.replace('/', ' ')
 		keyword = keyword.strip('\n')
 
 		init_url = self.init_url % (keyword.replace(' ', '+'), 0, 50)
-		n_tries_filtering = 0
-
-		while n_tries_filtering < self.max_n_tries:
-			filtering_urls = self.get_filter_urls(init_url)
-			n_tries_filtering += 1
-			if filtering_urls:
-				break
+		filtering_urls = self.get_filter_urls(init_url, 0)
 
 		# if not filtering_urls:
 		# 	check = self.get_filter_urls(self.fixed_test_url)
@@ -78,20 +72,13 @@ class indeed_resumes(object):
 				else:
 					beg = end
 					end = end+100
-				postfix = '&start=%d&limit=%d&radius=100&%s&co=%s' % (beg, end, sort, self.country_code)
-
-				n_tries_resource = 0
-				while n_tries_resource < self.max_n_tries:
-					data = self.get_resource(url_+postfix)
-					n_tries_resource += 1
-					if data:
-						break
-
+				postfix = '&start=%d&limit=%d&radius=100&%s&co=%s' % (beg, end, sort, self.country_code)	
+				data = self.get_resource(url_+postfix)
 				if not data:
-					continue
-				# 	check = self.get_resource(self.fixed_test_url)
-				# 	if not check:
-				# 		break
+					check = self.get_resource(self.fixed_test_url, 0)
+					if not check:
+						slp(200)
+						continue
 				
 				for each in data:
 					item = pq_(each)
@@ -104,7 +91,7 @@ class indeed_resumes(object):
 				print 'db locked..will wait for few secs'
 				slp(5)
 				db_insert_hash(n_profiles, self.country_code)
-			print 'inserted %d records to db.. %s' % (len(n_profiles), keyword)	
+			print 'inserted %d records to db.. %s, %d' % (len(n_profiles), keyword, keyword_index)	
 			n_profiles = {}
 			slp(2) #--sleeping for 2 secs for every filter for not making calls too fast and get blocked quickly
 			gc.collect()
@@ -114,65 +101,82 @@ class indeed_resumes(object):
 		return
 	
 
-	def get_filter_urls(self, init_url):
-		filtering_urls = []
-		resp = None
-		while not resp:
-			try:
-				user_agent = self.user_agents_cycle.next()
-				resp = requests.get(init_url, headers = {'user_agent': user_agent})
-			except Exception, e:
-				print str(e), '###'
-				slp(100)
-				pass
-		if resp.status_code == 200 and len(self.get_static_resource(self.fixed_test_url)):
-			filtering_urls = pq_(resp.text)
-			filtering_urls = filtering_urls('.refinement')
-			return filtering_urls
-		else:
+	def get_filter_urls(self, init_url, counter):
+		if conter >= self.max_recursion_depth:
+			return []
+		try:
+			filtering_urls = []
+			resp = None
+			while not resp:
+				try:
+					user_agent = self.user_agents_cycle.next()
+					resp = requests.get(init_url, headers = {'user_agent': user_agent})
+				except Exception, e:
+					print str(e), '###'
+					slp(100)
+					pass
+			if resp.status_code == 200 and len(self.get_static_resource(self.fixed_test_url)):
+				filtering_urls = pq_(resp.text)
+				filtering_urls = filtering_urls('.refinement')
+				return filtering_urls
+			else:
+				counter += 1
+				return self.get_filter_urls(init_url, counter)
+		except RuntimeError:
 			slp(300)
 			return []
 
-	def get_resource(self, url_):
-		data = []
-		resp = None
-		while not resp:
-			try:
-				user_agent = self.user_agents_cycle.next()
-				resp = requests.get(url_, headers = {'user_agent': user_agent})
-			except Exception:
-				print str(e), '@@@'
+	def get_resource(self, url_, counter):
+		if counter >= self.max_recursion_depth:
+			return []
+		try:
+			data = []
+			resp = None
+			while not resp:
+				try:
+					user_agent = self.user_agents_cycle.next()
+					resp = requests.get(url_, headers = {'user_agent': user_agent})
+				except Exception:
+					print str(e), '@@@'
+					slp(100)
+					pass
+			if resp.status_code == 200 and len(self.get_static_resource(self.fixed_test_url)):
+				data = pq_(resp.text)
+				data = data('#results').children()
+				return data
+			else:
 				slp(100)
-				pass
-		if resp.status_code == 200 and len(self.get_static_resource(self.fixed_test_url)):
-			data = pq_(resp.text)
-			data = data('#results').children()
-			return data
-		else:
+				counter += 1
+				return self.get_resource(url_, counter)
+		except RuntimeError:
+			slp(300)
 			return []
 
 	def get_static_resource(self, url):
 		data = []
 		resp = None
-		while not resp:
-			try:
-				user_agent = self.user_agents_cycle.next()
-				resp = requests.get(url, headers = {'user_agent': user_agent})
-			except Exception, e:
-				print str(e)
-				slp(100)
-				pass
-		if resp.status_code == 200:
-			data = pq_(resp.text)
-			data = data('#results').children()
-			return data
-		else:
-			return data
+		try:
+			while not resp:
+				try:
+					user_agent = self.user_agents_cycle.next()
+					resp = requests.get(url, headers = {'user_agent': user_agent})
+				except Exception, e:
+					print str(e)
+					slp(100)
+					pass
+			if resp.status_code == 200:
+				data = pq_(resp.text)
+				data = data('#results').children()
+				return data
+			else:
+				return data
+		except RuntimeError:
+			return []
 
 	
 	def begin(self):
 		sorts = ['sort=date', '']
-		keywords_done_idx = 0
+		keywords_done_idx = 45
 		#keywords_done_idx = self.r_master.get(self.country_code) #--this over here should talk to master's redis
 		print 'starting from %s' % str(keywords_done_idx)
 		if not keywords_done_idx:
@@ -186,7 +190,7 @@ class indeed_resumes(object):
 				continue
 			else:
 				for sort in sorts:
-					self.resource_collection(keyword, sort)
+					self.resource_collection(i, keyword, sort)
 				#self.r_master.set(self.country_code, i)
 		self.send_to_master()
 		self.r_master.hset('droplets', socket.gethostname(),  True)
