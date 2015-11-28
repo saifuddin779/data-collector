@@ -37,9 +37,10 @@ class indeed_resumes(object):
 		n_profiles = {}
 		keyword = '%s' % keyword.replace('/', ' ')
 		keyword = keyword.strip('\n')
-
+		print keyword, '##~~'
 		init_url = self.init_url % (keyword.replace(' ', '+'), 0, 50)
 		filtering_urls = self.get_filter_urls(init_url, 0)
+		print 'filtering urls here...'
 
 		# if not filtering_urls:
 		# 	check = self.get_filter_urls(self.fixed_test_url)
@@ -102,57 +103,59 @@ class indeed_resumes(object):
 	
 
 	def get_filter_urls(self, init_url, counter):
+		print counter, 'filter', init_url
 		if counter >= self.max_recursion_depth:
 			print 'max recursion depth achieved in the get_filter_urls'
 			return []
-		try:
-			filtering_urls = []
-			resp = None
-			while not resp:
-				try:
-					user_agent = self.user_agents_cycle.next()
-					resp = requests.get(init_url, headers = {'user_agent': user_agent})
-				except Exception, e:
-					print str(e), '###'
-					slp(100)
-					pass
-			if resp.status_code == 200 and len(self.get_static_resource(self.fixed_test_url)):
-				filtering_urls = pq_(resp.text)
-				filtering_urls = filtering_urls('.refinement')
-				return filtering_urls
-			else:
-				counter += 1
-				return self.get_filter_urls(init_url, counter)
-		except RuntimeError:
-			slp(300)
-			return []
+		#try:
+		filtering_urls = []
+		resp = None
+		while not resp:
+			try:
+				user_agent = self.user_agents_cycle.next()
+				resp = requests.get(init_url, headers = {'user_agent': user_agent})
+			except Exception, e:
+				print str(e), '###'
+				slp(100)
+				pass
+		if resp.status_code == 200 and len(self.get_static_resource(self.fixed_test_url)):
+			filtering_urls = pq_(resp.text)
+			filtering_urls = filtering_urls('.refinement')
+			return filtering_urls
+		else:
+			counter += 1
+			return self.get_filter_urls(init_url, counter)
+		# except RuntimeError:
+		# 	slp(300)
+		# 	return []
 
 	def get_resource(self, url_, counter):
+		print counter,'resource', url_
 		if counter >= self.max_recursion_depth:
 			print 'max recursion depth achieved in the get_resource'
 			return []
-		try:
-			data = []
-			resp = None
-			while not resp:
-				try:
-					user_agent = self.user_agents_cycle.next()
-					resp = requests.get(url_, headers = {'user_agent': user_agent})
-				except Exception:
-					print str(e), '@@@'
-					slp(100)
-					pass
-			if resp.status_code == 200 and len(self.get_static_resource(self.fixed_test_url)):
-				data = pq_(resp.text)
-				data = data('#results').children()
-				return data
-			else:
+		#try:
+		data = []
+		resp = None
+		while not resp:
+			try:
+				user_agent = self.user_agents_cycle.next()
+				resp = requests.get(url_, headers = {'user_agent': user_agent})
+			except Exception:
+				print str(e), '@@@'
 				slp(100)
-				counter += 1
-				return self.get_resource(url_, counter)
-		except RuntimeError:
-			slp(300)
-			return []
+				pass
+		if resp.status_code == 200 and len(self.get_static_resource(self.fixed_test_url)):
+			data = pq_(resp.text)
+			data = data('#results').children()
+			return data
+		else:
+			slp(100)
+			counter += 1
+			return self.get_resource(url_, counter)
+		# except RuntimeError:
+		# 	slp(300)
+		# 	return []
 
 	def get_static_resource(self, url):
 		data = []
