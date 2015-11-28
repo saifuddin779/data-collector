@@ -146,7 +146,7 @@ class indeed_resumes(object):
 	
 	def begin(self):
 		sorts = ['sort=date', '']
-		keywords_done_idx = 40
+		keywords_done_idx = 43
 		#keywords_done_idx = self.r_master.get(self.country_code) #--this over here should talk to master's redis
 		print 'starting from %s' % str(keywords_done_idx)
 		if not keywords_done_idx:
@@ -168,7 +168,7 @@ class indeed_resumes(object):
 						print 'putting to sleep for 10 mins because last 4 keywords went nill and check indicated block..'
 						print 'currently worked at .. %d' % i
 						slp(600)
-						
+
 				#self.r_master.set(self.country_code, i)
 		#self.send_to_master()
 		#self.r_master.hset('droplets', socket.gethostname(),  True)
