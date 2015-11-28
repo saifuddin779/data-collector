@@ -146,6 +146,7 @@ class indeed_resumes(object):
 				slp(100)
 				pass
 		if resp.status_code == 200 and len(self.get_static_resource(self.fixed_test_url)):
+			print 'resource successfull'
 			data = pq_(resp.text)
 			data = data('#results').children()
 			return data
