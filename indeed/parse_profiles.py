@@ -23,7 +23,7 @@ class indeed_resumes(object):
 		self.fixed_test_url = 'http://www.indeed.com/resumes?q=excel&co='+self.country_code
 		self.url_ = 'http://www.indeed.com/resumes%s'
 		self.user_agents_cycle = cycle(user_agents)
-		self.max_recursion_depth = 50
+		self.max_recursion_depth = 10
 		#self.r_master = redis.StrictRedis(host=self.master, port='6379')
 		self.n_all = 0
 
@@ -98,7 +98,7 @@ class indeed_resumes(object):
 			filtering_urls = filtering_urls('.refinement')
 			return filtering_urls
 		else:
-			slp(10)
+			slp(5)
 			return self.get_filter_urls(init_url, counter+1)
 
 	def get_resource(self, url_, counter):
@@ -120,7 +120,7 @@ class indeed_resumes(object):
 			data = data('#results').children()
 			return data
 		else:
-			slp(10)
+			slp(5)
 			return self.get_resource(url_, counter+1)
 
 	def get_static_resource(self, url):
