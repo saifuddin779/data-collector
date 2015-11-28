@@ -102,7 +102,7 @@ class indeed_resumes(object):
 	
 
 	def get_filter_urls(self, init_url, counter):
-		if conter >= self.max_recursion_depth:
+		if counter >= self.max_recursion_depth:
 			return []
 		try:
 			filtering_urls = []
@@ -171,7 +171,7 @@ class indeed_resumes(object):
 			else:
 				return data
 		except RuntimeError:
-			return []
+			return data
 
 	
 	def begin(self):
