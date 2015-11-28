@@ -71,7 +71,7 @@ class indeed_resumes(object):
 		gc.collect()
 		current_time = tm()
 		self.time_all.append((keyword, n_all, current_time - start_time))
-		print 'current time passed..%d for ' % int(current_time - begin_time)
+		print 'current time passed..%d secs for one round of %s' % (int(current_time - begin_time), keyword)
 		return
 	
 
