@@ -41,7 +41,7 @@ class indeed_resumes(object):
 		init_url = self.init_url % (keyword.replace(' ', '+'), 0, 50)
 		n_tries_filtering = 0
 
-		while n_tries < self.max_n_tries:
+		while n_tries_filtering < self.max_n_tries:
 			filtering_urls = self.get_filter_urls(init_url)
 			n_tries_filtering += 1
 			if filtering_urls:
