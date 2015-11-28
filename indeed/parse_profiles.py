@@ -24,8 +24,7 @@ class indeed_resumes(object):
 		self.url_ = 'http://www.indeed.com/resumes%s'
 		self.user_agents_cycle = cycle(user_agents)
 		self.max_recursion_depth = 10
-		#self.r_master = redis.StrictRedis(host=self.master, port='6379')
-		self.n_all = 0
+		self.time_all = []
 
 	def init_redis(self):
 		if not self.r_host.get('all_count'):
@@ -34,6 +33,7 @@ class indeed_resumes(object):
 
 	def resource_collection(self, keyword_index, keyword, sort, rest_kewords=False):
 		start_time = tm()
+		n_all = 0
 		n_profiles = {}
 		keyword = '%s' % keyword.replace('/', ' ')
 		keyword = keyword.strip('\n')
@@ -51,17 +51,13 @@ class indeed_resumes(object):
 					end = end+100
 				postfix = '&start=%d&limit=%d&radius=100&%s&co=%s' % (beg, end, sort, self.country_code)	
 				data = self.get_resource(url_+postfix, 0)
-				#if not data:
-				#	check = self.get_resource(self.fixed_test_url, 0)
-				#	if not check:
-				#		slp(200)
-				#		continue
-				
+
 				for each in data:
 					item = pq_(each)
 					unique_id = item.attr('id')
 					city_ = item('.location').text()
 					n_profiles[unique_id] = city_
+					n_all += 1
 			try:
 				db_insert_hash(n_profiles, self.country_code)
 			except:
@@ -74,13 +70,15 @@ class indeed_resumes(object):
 			gc.collect()
 		gc.collect()
 		current_time = tm()
-		print 'current time passed..%d' % int(current_time - begin_time)
+		self.time_all.append((keyword, n_all, current_time - start_time))
+		print 'current time passed..%d for ' % int(current_time - begin_time)
 		return
 	
 
 	def get_filter_urls(self, init_url, counter):
 		if counter >= self.max_recursion_depth:
 			print 'max recursion depth achieved in the get_filter_urls'
+			slp(300)
 			return []
 		
 		filtering_urls = []
@@ -98,12 +96,13 @@ class indeed_resumes(object):
 			filtering_urls = filtering_urls('.refinement')
 			return filtering_urls
 		else:
-			#slp(5)
+			slp(3)
 			return self.get_filter_urls(init_url, counter+1)
 
 	def get_resource(self, url_, counter):
 		if counter >= self.max_recursion_depth:
 			print 'max recursion depth achieved in the get_resource'
+			slp(300)
 			return []
 		data = []
 		resp = None
@@ -120,7 +119,7 @@ class indeed_resumes(object):
 			data = data('#results').children()
 			return data
 		else:
-			#slp(0)
+			slp(3)
 			return self.get_resource(url_, counter+1)
 
 	def get_static_resource(self, url):
@@ -162,10 +161,19 @@ class indeed_resumes(object):
 			else:
 				for sort in sorts:
 					self.resource_collection(i, keyword, sort)
+				#--checking the block
+				if sum(map(lambda p: p[1], self.time_all[-4:])) == 0 and len(self.time_all) > 0:
+					check = self.get_static_resource(self.fixed_test_url)
+					if not len(check):
+						print 'putting to sleep for 10 mins because last 4 keywords went nill and check indicated block..'
+						print 'currently worked at .. %d' % i
+						slp(600)
+
+
 				#self.r_master.set(self.country_code, i)
-		self.send_to_master()
-		self.r_master.hset('droplets', socket.gethostname(),  True)
-		print 'sent db to master...terminating..'
+		#self.send_to_master()
+		#self.r_master.hset('droplets', socket.gethostname(),  True)
+		#print 'sent db to master...terminating..'
 		self.keywords.close()
 		sys.exit()
 		return
