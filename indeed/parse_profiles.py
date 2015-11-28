@@ -23,6 +23,7 @@ class indeed_resumes(object):
 		self.fixed_test_url = 'http://www.indeed.com/resumes?q=excel&co='+self.country_code
 		self.url_ = 'http://www.indeed.com/resumes%s'
 		self.user_agents_cycle = cycle(user_agents)
+		self.max_n_tries = 50
 		#self.r_master = redis.StrictRedis(host=self.master, port='6379')
 		self.n_all = 0
 
@@ -38,7 +39,13 @@ class indeed_resumes(object):
 		keyword = keyword.strip('\n')
 
 		init_url = self.init_url % (keyword.replace(' ', '+'), 0, 50)
-		filtering_urls = self.get_filter_urls(init_url)
+		n_tries_filtering = 0
+
+		while n_tries < self.max_n_tries:
+			filtering_urls = self.get_filter_urls(init_url)
+			n_tries_filtering += 1
+			if filtering_urls:
+				break
 
 		# if not filtering_urls:
 		# 	check = self.get_filter_urls(self.fixed_test_url)
@@ -71,12 +78,20 @@ class indeed_resumes(object):
 				else:
 					beg = end
 					end = end+100
-				postfix = '&start=%d&limit=%d&radius=100&%s&co=%s' % (beg, end, sort, self.country_code)	
-				data = self.get_resource(url_+postfix)
-				if not data:
-					check = self.get_resource(self.fixed_test_url)
-					if not check:
+				postfix = '&start=%d&limit=%d&radius=100&%s&co=%s' % (beg, end, sort, self.country_code)
+
+				n_tries_resource = 0
+				while n_tries_resource < self.max_n_tries:
+					data = self.get_resource(url_+postfix)
+					n_tries_resource += 1
+					if data:
 						break
+
+				if not data:
+					continue
+				# 	check = self.get_resource(self.fixed_test_url)
+				# 	if not check:
+				# 		break
 				
 				for each in data:
 					item = pq_(each)
@@ -100,79 +115,59 @@ class indeed_resumes(object):
 	
 
 	def get_filter_urls(self, init_url):
-		try:
-			filtering_urls = []
-			resp = None
-			while not resp:
-				try:
-					user_agent = self.user_agents_cycle.next()
-					resp = requests.get(init_url, headers = {'user_agent': user_agent})
-				except Exception, e:
-					print str(e), '###'
-					slp(100)
-					pass
-			if resp.status_code == 200 and len(self.get_static_resource(self.fixed_test_url)):
-				filtering_urls = pq_(resp.text)
-				filtering_urls = filtering_urls('.refinement')
-				return filtering_urls
-			else:
-				slp(300)
-				return []
-				# try:
-				# 	return self.get_filter_urls(init_url)
-				# except RuntimeError:
-				# 	slp(200)
-				# 	return []
-		except RuntimeError:
+		filtering_urls = []
+		resp = None
+		while not resp:
+			try:
+				user_agent = self.user_agents_cycle.next()
+				resp = requests.get(init_url, headers = {'user_agent': user_agent})
+			except Exception, e:
+				print str(e), '###'
+				slp(100)
+				pass
+		if resp.status_code == 200 and len(self.get_static_resource(self.fixed_test_url)):
+			filtering_urls = pq_(resp.text)
+			filtering_urls = filtering_urls('.refinement')
+			return filtering_urls
+		else:
 			slp(300)
 			return []
 
 	def get_resource(self, url_):
-		try:
-			data = []
-			resp = None
-			while not resp:
-				try:
-					user_agent = self.user_agents_cycle.next()
-					resp = requests.get(url_, headers = {'user_agent': user_agent})
-				except Exception:
-					print str(e), '@@@'
-					slp(100)
-					pass
-			if resp.status_code == 200 and len(self.get_static_resource(self.fixed_test_url)):
-				data = pq_(resp.text)
-				data = data('#results').children()
-				return data
-			else:
-				try:
-					return self.get_resource(url_)
-				except RuntimeError:
-					slp(300)
-					return []
-		except RuntimeError:
-			slp(300)
+		data = []
+		resp = None
+		while not resp:
+			try:
+				user_agent = self.user_agents_cycle.next()
+				resp = requests.get(url_, headers = {'user_agent': user_agent})
+			except Exception:
+				print str(e), '@@@'
+				slp(100)
+				pass
+		if resp.status_code == 200 and len(self.get_static_resource(self.fixed_test_url)):
+			data = pq_(resp.text)
+			data = data('#results').children()
+			return data
+		else:
 			return []
 
 	def get_static_resource(self, url):
 		data = []
 		resp = None
-		try:
-			while not resp:
-				try:
-					user_agent = self.user_agents_cycle.next()
-					resp = requests.get(url, headers = {'user_agent': user_agent})
-				except Exception, e:
-					print str(e)
-					slp(100)
-					pass
-			if resp.status_code == 200:
-				data = pq_(resp.text)
-				data = data('#results').children()
-				return data
-			else:
-				return data
-		except RuntimeError:
-			return []
+		while not resp:
+			try:
+				user_agent = self.user_agents_cycle.next()
+				resp = requests.get(url, headers = {'user_agent': user_agent})
+			except Exception, e:
+				print str(e)
+				slp(100)
+				pass
+		if resp.status_code == 200:
+			data = pq_(resp.text)
+			data = data('#results').children()
+			return data
+		else:
+			return data
 
 	
 	def begin(self):
