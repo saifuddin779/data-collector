@@ -146,7 +146,7 @@ class indeed_resumes(object):
 	
 	def begin(self):
 		sorts = ['sort=date', '']
-		keywords_done_idx = 43
+		keywords_done_idx = 53
 		#keywords_done_idx = self.r_master.get(self.country_code) #--this over here should talk to master's redis
 		print 'starting from %s' % str(keywords_done_idx)
 		if not keywords_done_idx:
