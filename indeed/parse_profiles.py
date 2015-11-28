@@ -103,6 +103,7 @@ class indeed_resumes(object):
 
 	def get_filter_urls(self, init_url, counter):
 		if counter >= self.max_recursion_depth:
+			print 'max recursion depth achieved in the get_filter_urls'
 			return []
 		try:
 			filtering_urls = []
@@ -128,6 +129,7 @@ class indeed_resumes(object):
 
 	def get_resource(self, url_, counter):
 		if counter >= self.max_recursion_depth:
+			print 'max recursion depth achieved in the get_resource'
 			return []
 		try:
 			data = []
