@@ -110,7 +110,7 @@ class indeed_resumes(object):
 			try:
 				user_agent = self.user_agents_cycle.next()
 				resp = requests.get(url_, headers = {'user_agent': user_agent})
-			except Exception:
+			except Exception, e:
 				print str(e), '@@@'
 				slp(100)
 				pass
@@ -131,7 +131,7 @@ class indeed_resumes(object):
 					user_agent = self.user_agents_cycle.next()
 					resp = requests.get(url, headers = {'user_agent': user_agent})
 				except Exception, e:
-					print str(e)
+					print str(e), '!!!'
 					slp(100)
 					pass
 			if resp.status_code == 200:
@@ -146,7 +146,7 @@ class indeed_resumes(object):
 	
 	def begin(self):
 		sorts = ['sort=date', '']
-		keywords_done_idx = 53
+		keywords_done_idx = 55
 		#keywords_done_idx = self.r_master.get(self.country_code) #--this over here should talk to master's redis
 		print 'starting from %s' % str(keywords_done_idx)
 		if not keywords_done_idx:
