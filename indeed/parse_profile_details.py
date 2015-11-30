@@ -119,7 +119,7 @@ def save_profiles(db_file, index=False):
 	
 	query = "select indeed_id from indeed_resumes order by id asc;"
 	cur.execute(query)
-	n_files == 0
+	n_files = 0
 	for i, row in enumerate(cur):
 		if i <= begin_index:
 			continue
@@ -138,6 +138,7 @@ def save_profiles(db_file, index=False):
 				f = open(filename, 'wb')
 				f.write(json.dumps(data))
 				f.close()
+				n_files += 1
 			except Exception, e:
 				print str(e)
 				slp(300)
