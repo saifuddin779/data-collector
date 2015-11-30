@@ -117,11 +117,11 @@ def save_profiles(db_file, index=False):
 
 	print 'begin index is .. %d' % begin_index
 	
-	query = "select indeed_id from indeed_resumes order by id asc;"
+	query = "select id, indeed_id from indeed_resumes order by id asc;"
 	cur.execute(query)
 	n_files = 0
-	for i, row in enumerate(cur):
-		if i <= begin_index:
+	for id_, indeed_id in enumerate(cur):
+		if id_ <= begin_index:
 			continue
 		else:
 			try:
@@ -131,10 +131,10 @@ def save_profiles(db_file, index=False):
 				if not os.path.exists(directory):
 					os.makedirs(directory)
 
-				data = indeed_resumes_details(row[0]).resource_collection()
+				data = indeed_resumes_details(indeed_id).resource_collection()
 				directory = "%d-%d" % (begin_index, begin_index+increment)
 
-				filename = '../../data/resumes/%s/%s.json' % (directory, row[0])
+				filename = '../../data/resumes/%s/%s.json' % (directory, indeed_id)
 				f = open(filename, 'wb')
 				f.write(json.dumps(data))
 				f.close()
@@ -143,6 +143,7 @@ def save_profiles(db_file, index=False):
 				print str(e)
 				slp(300)
 	con.close()
+	return
 
 
 
