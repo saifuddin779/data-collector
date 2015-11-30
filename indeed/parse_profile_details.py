@@ -129,11 +129,11 @@ def save_profiles(db_file, index=False):
 				if n_files % increment == 0:
 					begin_index = begin_index + increment
 
+				directory = "%d-%d" % (begin_index, begin_index+increment)
 				if not os.path.exists(directory):
 					os.makedirs(directory)
 
 				data = indeed_resumes_details(indeed_id).resource_collection()
-				directory = "%d-%d" % (begin_index, begin_index+increment)
 
 				filename = '../../data/resumes/%s/%s.json' % (directory, indeed_id)
 				f = open(filename, 'wb')
