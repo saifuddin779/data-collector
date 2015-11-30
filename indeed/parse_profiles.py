@@ -22,7 +22,7 @@ class indeed_resumes(object):
 	def __init__(self, country_code, master, index):
 		self.country_code = country_code
 		self.master = master
-		self.index = index
+		self.index = int(index)
 		self.keywords = open(skillset+'.json', 'rb')
 		self.init_url = 'http://www.indeed.com/resumes?q=%s&co='+self.country_code+'&start=%d&limit=%d'
 		self.fixed_test_url = 'http://www.indeed.com/resumes?q=excel&co='+self.country_code
