@@ -2,6 +2,7 @@ import sys, os, json, ast, requests
 from time import time as tm, sleep as slp
 from datetime import datetime as dt
 from itertools import cycle
+import sqlite3 as  sql
 
 from pyquery import PyQuery as pq_
 from browse import browse_url_profile_details
@@ -43,11 +44,11 @@ class indeed_resumes_details(object):
 		if not data:
 			return details
 
-		details['name'] = data('#basic_info_row #basic_info_cell #resume-contact').text()
-		details['title'] = data('#basic_info_row #basic_info_cell #headline').text()
-		details['address'] = data('#basic_info_row #basic_info_cell #contact_info_container .adr #headline_location').text()
-		details['skills'] = data('.skills-content #skills-items .data_display .skill-container').text().split(',')
-		details['additional_info'] = data('.additionalInfo-content #additionalinfo-items .data_display').text().encode('ascii','ignore')
+		details['name'] = data('#basic_info_row #basic_info_cell #resume-contact').text().strip('\n')
+		details['title'] = data('#basic_info_row #basic_info_cell #headline').text().strip('\n')
+		details['address'] = data('#basic_info_row #basic_info_cell #contact_info_container .adr #headline_location').text().strip('\n')
+		details['skills'] = data('.skills-content #skills-items .data_display .skill-container').text().strip('\n').split(',')
+		details['additional_info'] = data('.additionalInfo-content #additionalinfo-items .data_display').text().strip('\n').encode('ascii','ignore')
 
 		identities = {}
 		for k, v in self.profile_identities.iteritems():
@@ -61,11 +62,11 @@ class indeed_resumes_details(object):
 					children = pq_(item.children())
 					for each, splits in v['items']:
 						if splits:
-							item_construct = children(each).text().split('-')
+							item_construct = children(each).text().strip('\n').split('-')
 							for sub, index in splits.iteritems():
-								data_[sub] = item_construct[index]
+								data_[sub] = item_construct[index].strip('\n')
 						else:
-							data_[each] = children(each).text().encode('ascii','ignore')
+							data_[each] = children(each).text().encode('ascii','ignore').strip('\n')
 
 				identities[k]['data'].append(data_)
 			details[k] = identities[k]
@@ -104,111 +105,55 @@ class indeed_resumes_details(object):
 
 
 
-def save_distincts():
-	"""
-	This method parses the unique ids from the given 
-	data directory of ids scrapped from indeed
-	"""
-	t1 = tm()
-	object_ = {}
-	data_dir = 'data/'
-	#export_folder = '/Volume/SKILLZEQ/resumes_v1/%s/%s/'
-	export_folder = '/Volume/SKILLZEQ/resumes_v1/%s/%s/'
-	target = 'profile_data/distincts_v2.json'
-	target_file = open(target, 'wb')
-	for root, directories, files in os.walk(data_dir):
-		for filename in files:
-			file_ = filename.split('.') #--complete filename
-			file_format = file_[1] #--.json
-			keyword = file_[0] #--file name
-			domain = root.split('/')[1] #--parent folder
-			if file_format == 'json':
-				filepath = os.path.join(root, filename)
-				f = open(filepath, 'rb')
-				for record in f:
-					try:
-						record = filter(lambda p: p['type'] == 'resource_id', ast.literal_eval(record))
-						for i in record:
-							unique_id = i['data']
-							if unique_id in object_:
-								object_[unique_id].append(keyword)
-							else:
-								object_[unique_id] = [keyword]
-							#object_[unique_id] = 1
-					except:
-						print filepath 
-						continue
-				f.close()
-	target_file.write(json.dumps(object_))
-	target_file.close()
-	t2 = tm()
-	print '%d seconds taken..' % int(t2-t1)
-	return
+def save_profiles(db_file, index=False):
+	increment = 200
+	con = sql.connect(db_file)
+	cur = con.cursor()
 
-def get_distincts():
-	"""
-	This method returns the parsed dict of the unique file generated from save_distincts
-	"""
-	target = 'profile_data/distincts_v2.json'
-	f = open(target, 'rb')
-	for a in f:
-		data = json.loads(a)
-	f.close()
-	print 'data fetched for resume links..'
-	return data
+	if not index:
+		begin_index = int([e[0] for e in cur.execute('select min(id) from indeed_resumes;')][0])
+	else:
+		begin_index = index
 
-def scrap_profiles(load_done=False):
-	done_ = {}
-	done_target = 'profile_data/done_v1.json'
-	t1 = tm()
-	data = get_distincts()
-	#folder = '/Volumes/SKILLZEQ/%s.json'
-	folder = '/Users/saif/skillz_eq_samples/%s.json'
-	for i, key in enumerate(data):
-		if key not in done_:
+	print 'begin index is .. %d' % begin_index
+	
+	query = "select indeed_id from indeed_resumes order by id asc;"
+	cur.execute(query)
+	n_files == 0
+	for i, row in enumerate(cur):
+		if i <= begin_index:
+			continue
+		else:
 			try:
-				obj = indeed_resumes_details(key)
-				profile = obj.resource_collection()
-				profile['semantics'] = data[key]
-			except:
-				print 'put to sleep for 300 secs due to break..'
+				if n_files % increment == 0:
+					begin_index = begin_index + increment
+
+				if not os.path.exists(directory):
+					os.makedirs(directory)
+
+				data = indeed_resumes_details(row[0]).resource_collection()
+				directory = "%d-%d" % (begin_index, begin_index+increment)
+
+				filename = '../../data/resumes/%s/%s.json' % (directory, row[0])
+				f = open(filename, 'wb')
+				f.write(json.dumps(data))
+				f.close()
+			except Exception, e:
+				print str(e)
 				slp(300)
-				try:
-					obj = indeed_resumes_details(key)
-					profile = obj.resource_collection()
-					profile['semantics'] = data[key]
-				except:
-					for k_ in data:
-						if k_ not in done_:
-							done_[k_] = 0
-					df = open(done_target, 'wb')
-					df.write(json.dumps(done_))
-					df.close()
-					print 'script terminated at %d records...data for dones in %s' % (i, done_target)
+	con.close()
 
-			f = open(folder % key, 'wb')
-			f.write(json.dumps(profile))
-			f.close()
-			done_[key] = 1
 
-			if i % 1000 == 0:
-				t2 = tm()
-				print '%d records saved in %d seconds..' % (i, int(t2-t1))
-				
-				if i == 2000:
-					break
-	t2 = tm()
-	print 'success... %d records scrapped.. in %d mins..' % (i, int(float(t2-t1)/60))
-	return
+
+
+
+
+
+
+
 
 
 if __name__ == '__main__':
 	obj = indeed_resumes_details('c3a2e69dd2e2ea83')
 	data = obj.resource_collection()
 	print data
-
-	#scrap_profiles()
-	
-	# get_distincts()
-	# save_distincts()
-	# get_ids()

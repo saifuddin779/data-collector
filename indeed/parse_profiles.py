@@ -15,9 +15,10 @@ locale.setlocale( locale.LC_ALL, 'en_US.UTF-8' )
 skillset = configs['skills_file'] #--change this to change the filename
 
 class indeed_resumes(object):
-	def __init__(self, country_code, master):
+	def __init__(self, country_code, master, index):
 		self.country_code = country_code
 		self.master = master
+		self.index = index
 		self.keywords = open(skillset+'.json', 'rb')
 		self.init_url = 'http://www.indeed.com/resumes?q=%s&co='+self.country_code+'&start=%d&limit=%d'
 		self.fixed_test_url = 'http://www.indeed.com/resumes?q=excel&co='+self.country_code
@@ -146,7 +147,7 @@ class indeed_resumes(object):
 	
 	def begin(self):
 		sorts = ['sort=date', '']
-		keywords_done_idx = 55
+		keywords_done_idx = self.index
 		#keywords_done_idx = self.r_master.get(self.country_code) #--this over here should talk to master's redis
 		print 'starting from %s' % str(keywords_done_idx)
 		if not keywords_done_idx:
@@ -191,5 +192,6 @@ if __name__ == '__main__':
 	begin_time = tm()
 	country_code = sys.argv[1]
 	master = sys.argv[2]
-	obj = indeed_resumes(country_code, master)
+	index = sys.argv[3]
+	obj = indeed_resumes(country_code, master, index)
 	obj.begin()
