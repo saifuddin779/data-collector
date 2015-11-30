@@ -7,8 +7,12 @@ from pyquery import PyQuery as pq_
 
 from cities import countries
 from configs import configs
+from parse_profile_details import indeed_resumes_details
 from db_access import db_insert_hash, get_distincts, id_exists
+
 from user_agents import user_agents
+
+
 
 data_dir = '../../data/'
 locale.setlocale( locale.LC_ALL, 'en_US.UTF-8' ) 
