@@ -43,7 +43,7 @@ class indeed_resumes(object):
 				os.makedirs(directory)
 			filename = '%s/%s.json' % (directory, unique_id)
 			f = open(filename, 'wb')
-			f.write(data)
+			f.write(json.dumps(data))
 			f.close()
 		return
 
