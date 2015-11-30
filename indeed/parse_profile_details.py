@@ -107,6 +107,7 @@ class indeed_resumes_details(object):
 
 def save_profiles(db_file, index=False):
 	increment = 200
+	root = '../../data/resumes/'
 	con = sql.connect(db_file)
 	cur = con.cursor()
 
@@ -129,13 +130,12 @@ def save_profiles(db_file, index=False):
 				if n_files % increment == 0:
 					begin_index = begin_index + increment
 
-				directory = "%d-%d" % (begin_index, begin_index+increment)
+				directory = root+"%d-%d" % (begin_index, begin_index+increment)
 				if not os.path.exists(directory):
 					os.makedirs(directory)
-
 				data = indeed_resumes_details(indeed_id).resource_collection()
 
-				filename = '../../data/resumes/%s/%s.json' % (directory, indeed_id)
+				filename = '%s/%s.json' % (directory, indeed_id)
 				f = open(filename, 'wb')
 				f.write(json.dumps(data))
 				f.close()
