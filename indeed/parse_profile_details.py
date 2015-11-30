@@ -75,16 +75,17 @@ class indeed_resumes_details(object):
 		details['timestamp'] = tm()
 		return details
 
-
 	def get_resource(self, url_):
-		user_agent = self.user_agents_cycle.next()
-		try:
-			resp = requests.get(url_, headers = {'user_agent': user_agent})
-		except:
-			slp(100)
-			print 'sleeping for 100 secs due to a block..'
-			user_agent = self.user_agents_cycle.next()
-			resp = requests.get(url_, headers = {'user_agent': user_agent})
+		data = []
+		resp = None
+		while not resp:
+			try:
+				user_agent = self.user_agents_cycle.next()
+				resp = requests.get(url_, headers = {'user_agent': user_agent})
+			except Exception, e:
+				print str(e), '~~~'
+				slp(100)
+				pass
 
 		if resp.status_code == 200:
 			data = pq_(resp.text)
@@ -97,12 +98,11 @@ class indeed_resumes_details(object):
 					data = data('#resume_body').children()
 					return data
 				else:
-					return []
+					return data
 			else:
 				return data
 		else:
-			return []
-
+			return data
 
 
 def save_profiles(db_file, index=False):
@@ -134,7 +134,6 @@ def save_profiles(db_file, index=False):
 				if not os.path.exists(directory):
 					os.makedirs(directory)
 				data = indeed_resumes_details(indeed_id).resource_collection()
-
 				filename = '%s/%s.json' % (directory, indeed_id)
 				f = open(filename, 'wb')
 				f.write(json.dumps(data))
@@ -147,9 +146,10 @@ def save_profiles(db_file, index=False):
 	return
 
 
-
+"""
 if __name__ == '__main__':
-	save_profiles('../../data/indeed-master-01.db')
+	#save_profiles('../../backup/indeed-master-01.db')
 	#obj = indeed_resumes_details('c3a2e69dd2e2ea83')
 	#data = obj.resource_collection()
 	#print data
+"""

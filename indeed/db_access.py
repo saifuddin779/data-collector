@@ -102,6 +102,19 @@ def get_distincts_all():
 	con.close()
 	return distinct_count
 
+def id_exists(unique_id):
+	query = "select indeed_id from indeed_resumes where indeed_id = '%s' limit 1;" % unique_id.encode('utf-8')
+	con = sql.connect(db_file)
+	cur = con.cursor()
+	cur.execute(query)
+	result = cur.fetchall()
+	if len(result):
+		resp = True
+	else:
+		resp = False
+	con.close()
+	return resp
+
 
 if __name__ == '__main__':
 	if len(sys.argv) > 1:

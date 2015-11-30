@@ -7,7 +7,7 @@ from pyquery import PyQuery as pq_
 
 from cities import countries
 from configs import configs
-from db_access import db_insert_hash, get_distincts
+from db_access import db_insert_hash, get_distincts, id_exists
 from user_agents import user_agents
 
 data_dir = '../../data/'
@@ -30,6 +30,17 @@ class indeed_resumes(object):
 	def init_redis(self):
 		if not self.r_host.get('all_count'):
 			self.r_host.set('all_count', 0)
+		return
+
+	def save_to_disk(self, data, unique_id):
+		if not id_exists(unique_id):
+			directory = '../../data/resumes/%s' % unique_id[0:2]
+			if not os.path.exists(directory):
+				os.makedirs(directory)
+			filename = '%s/%s.json' % (directory, unique_id)
+			f = open(filename, 'wb')
+			f.write(data)
+			f.close()
 		return
 
 	def resource_collection(self, keyword_index, keyword, sort, rest_kewords=False):
@@ -58,13 +69,19 @@ class indeed_resumes(object):
 					unique_id = item.attr('id')
 					city_ = item('.location').text()
 					n_profiles[unique_id] = city_
+					profile_data = indeed_resumes_details(unique_id).resource_collection()
+					self.save_to_disk(profile_data, unique_id)
 					n_all += 1
-			try:
-				db_insert_hash(n_profiles, self.country_code)
-			except:
-				print 'db locked..will wait for few secs'
-				slp(5)
-				db_insert_hash(n_profiles, self.country_code)
+
+			db_success = False
+			while not db_success:
+				try:
+					db_insert_hash(n_profiles, self.country_code)
+					db_success = True
+				except:
+					print 'db locked..will wait for 5 secs and try again..'
+					slp(5)
+					pass
 			print 'inserted %d records to db.. %s, %d' % (len(n_profiles), keyword, keyword_index)	
 			n_profiles = {}
 			slp(2) #--sleeping for 2 secs for every filter for not making calls too fast and get blocked quickly
