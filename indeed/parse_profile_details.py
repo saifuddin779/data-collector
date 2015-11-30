@@ -148,15 +148,8 @@ def save_profiles(db_file, index=False):
 
 
 
-
-
-
-
-
-
-
-
 if __name__ == '__main__':
-	obj = indeed_resumes_details('c3a2e69dd2e2ea83')
-	data = obj.resource_collection()
-	print data
+	save_profiles('../../data/indeed-master-01.db')
+	#obj = indeed_resumes_details('c3a2e69dd2e2ea83')
+	#data = obj.resource_collection()
+	#print data
