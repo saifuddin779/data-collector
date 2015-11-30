@@ -120,7 +120,8 @@ def save_profiles(db_file, index=False):
 	query = "select id, indeed_id from indeed_resumes order by id asc;"
 	cur.execute(query)
 	n_files = 0
-	for id_, indeed_id in enumerate(cur):
+	for id_, indeed_id in cur:
+		print id_, indeed_id, n_files
 		if id_ <= begin_index:
 			continue
 		else:
