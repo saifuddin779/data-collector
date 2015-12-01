@@ -202,7 +202,7 @@ class indeed_resumes(object):
 					if not len(check):
 						print 'putting to sleep for 10 mins because last 4 keywords went nill and check indicated block..'
 						print 'currently worked at .. %d' % i
-						slp(600)
+						slp(1200)
 
 				#self.r_master.set(self.country_code, i)
 		#self.send_to_master()
