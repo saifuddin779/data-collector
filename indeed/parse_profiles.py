@@ -189,13 +189,13 @@ class indeed_resumes(object):
 			keywords_done_idx = int(keywords_done_idx)
 		
 		for i, keyword in enumerate(self.keywords):
-			print 'now working on..%d in begin..' % i 
 			keyword = keyword.replace('\n', '')
 			if i <= keywords_done_idx:
 				continue
 			else:
+				print 'now working on..%d in begin..' % i 
 				for sort in sorts:
-					self.resource_collection(i, keyword, sort)
+					self.resource_collection(i, self.keywords[i], sort)
 				#--checking the block
 				if sum(map(lambda p: p[1], self.time_all[-4:])) == 0 and len(self.time_all) > 4:
 					check = self.get_static_resource(self.fixed_test_url)
@@ -203,7 +203,7 @@ class indeed_resumes(object):
 						print 'putting to sleep for 10 mins because last 4 keywords went nill and check indicated block..'
 						print 'currently worked at .. %d' % i
 						slp(15)
-						i = i - 3
+						i -= 3
 
 				#self.r_master.set(self.country_code, i)
 		#self.send_to_master()
