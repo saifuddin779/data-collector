@@ -28,7 +28,7 @@ class indeed_resumes(object):
 		self.fixed_test_url = 'http://www.indeed.com/resumes?q=excel&co='+self.country_code
 		self.url_ = 'http://www.indeed.com/resumes%s'
 		self.user_agents_cycle = cycle(user_agents)
-		self.max_recursion_depth = 10
+		self.max_recursion_depth = 5
 		self.time_all = []
 
 	def init_redis(self):
@@ -54,11 +54,17 @@ class indeed_resumes(object):
 		keyword = '%s' % keyword.replace('/', ' ')
 		keyword = keyword.strip('\n')
 		init_url = self.init_url % (keyword.replace(' ', '+'), 0, 50)
-		filtering_urls = self.get_filter_urls(init_url, 0)
+		
+		filtering_urls, result_count  = self.get_filter_urls(init_url, 0)
+		
+		if result_count >= 1000:
+			counter = 10
+		else:
+			counter = int(max(float(result_count)/100, 1))
 		
 		for route in filtering_urls:
 			url_ = self.url_ % pq_(route).children('a').attr('href')
-			for i in range(15):
+			for i in range(counter):
 				if i == 0:
 					beg = i
 					end = i+100
@@ -66,6 +72,7 @@ class indeed_resumes(object):
 					beg = end
 					end = end+100
 				postfix = '&start=%d&limit=%d&radius=100&%s&co=%s' % (beg, end, sort, self.country_code)	
+				print url_+postfix	
 				data = self.get_resource(url_+postfix, 0)
 
 				for each in data:
@@ -88,7 +95,7 @@ class indeed_resumes(object):
 					pass
 			print 'inserted %d records to db.. %s, %d' % (len(n_profiles), keyword, keyword_index)	
 			n_profiles = {}
-			slp(2) #--sleeping for 2 secs for every filter for not making calls too fast and get blocked quickly
+			slp(0) #--sleeping for 2 secs for every filter for not making calls too fast and get blocked quickly
 			gc.collect()
 		gc.collect()
 		current_time = tm()
@@ -101,7 +108,7 @@ class indeed_resumes(object):
 		if counter >= self.max_recursion_depth:
 			print 'max recursion depth achieved in the get_filter_urls'
 			#slp(300)
-			return []
+			return ([], 0)
 		
 		filtering_urls = []
 		resp = None
@@ -111,14 +118,19 @@ class indeed_resumes(object):
 				resp = requests.get(init_url, headers = {'user_agent': user_agent})
 			except Exception, e:
 				print str(e), '###'
-				slp(100)
+				slp(10)
 				pass
 		if resp.status_code == 200 and len(self.get_static_resource(self.fixed_test_url)):
 			filtering_urls = pq_(resp.text)
+			count =  filtering_urls('#search_header #rezsearch #search_table #result_count').text().split(' ')[0].replace(',', '')
 			filtering_urls = filtering_urls('.refinement')
-			return filtering_urls
+			if count.isdigit():
+				count = int(count)
+			else:
+				count = 0
+			return (filtering_urls, count)
 		else:
-			slp(3)
+			slp(1)
 			return self.get_filter_urls(init_url, counter+1)
 
 	def get_resource(self, url_, counter):
@@ -134,14 +146,14 @@ class indeed_resumes(object):
 				resp = requests.get(url_, headers = {'user_agent': user_agent})
 			except Exception, e:
 				print str(e), '@@@'
-				slp(100)
+				slp(10)
 				pass
 		if resp.status_code == 200 and len(self.get_static_resource(self.fixed_test_url)):
 			data = pq_(resp.text)
 			data = data('#results').children()
 			return data
 		else:
-			slp(3)
+			slp(1)
 			return self.get_resource(url_, counter+1)
 
 	def get_static_resource(self, url):
@@ -154,7 +166,7 @@ class indeed_resumes(object):
 					resp = requests.get(url, headers = {'user_agent': user_agent})
 				except Exception, e:
 					print str(e), '!!!'
-					slp(100)
+					slp(5)
 					pass
 			if resp.status_code == 200:
 				data = pq_(resp.text)
@@ -184,7 +196,7 @@ class indeed_resumes(object):
 				for sort in sorts:
 					self.resource_collection(i, keyword, sort)
 				#--checking the block
-				if sum(map(lambda p: p[1], self.time_all[-4:])) == 0 and len(self.time_all) > 0:
+				if sum(map(lambda p: p[1], self.time_all[-4:])) == 0 and len(self.time_all) > 4:
 					check = self.get_static_resource(self.fixed_test_url)
 					if not len(check):
 						print 'putting to sleep for 10 mins because last 4 keywords went nill and check indicated block..'
