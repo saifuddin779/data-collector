@@ -195,15 +195,14 @@ class indeed_resumes(object):
 			else:
 				print 'now working on..%d in begin..' % i 
 				for sort in sorts:
-					self.resource_collection(i, self.keywords[i], sort)
+					self.resource_collection(i, keyword, sort)
 				#--checking the block
 				if sum(map(lambda p: p[1], self.time_all[-4:])) == 0 and len(self.time_all) > 4:
 					check = self.get_static_resource(self.fixed_test_url)
 					if not len(check):
 						print 'putting to sleep for 10 mins because last 4 keywords went nill and check indicated block..'
 						print 'currently worked at .. %d' % i
-						slp(15)
-						i -= 3
+						slp(600)
 
 				#self.r_master.set(self.country_code, i)
 		#self.send_to_master()
