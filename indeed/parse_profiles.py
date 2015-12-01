@@ -120,7 +120,7 @@ class indeed_resumes(object):
 				print str(e), '###'
 				slp(10)
 				pass
-		if resp.status_code == 200 and len(self.get_static_resource(self.fixed_test_url)):
+		if resp.status_code == 200:#and len(self.get_static_resource(self.fixed_test_url)):
 			filtering_urls = pq_(resp.text)
 			count =  filtering_urls('#search_header #rezsearch #search_table #result_count').text().split(' ')[0].replace(',', '')
 			filtering_urls = filtering_urls('.refinement')
@@ -148,7 +148,7 @@ class indeed_resumes(object):
 				print str(e), '@@@'
 				slp(10)
 				pass
-		if resp.status_code == 200 and len(self.get_static_resource(self.fixed_test_url)):
+		if resp.status_code == 200:#and len(self.get_static_resource(self.fixed_test_url)):
 			data = pq_(resp.text)
 			data = data('#results').children()
 			return data
@@ -197,7 +197,7 @@ class indeed_resumes(object):
 				for sort in sorts:
 					self.resource_collection(i, keyword, sort)
 				#--checking the block
-				if sum(map(lambda p: p[1], self.time_all[-4:])) == 0 and len(self.time_all) > 4:
+				if sum(map(lambda p: p[1], self.time_all[-2:])) == 0 and len(self.time_all) > 2:
 					check = self.get_static_resource(self.fixed_test_url)
 					if not len(check):
 						print 'putting to sleep for 10 mins because last 4 keywords went nill and check indicated block..'
