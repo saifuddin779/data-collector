@@ -28,7 +28,7 @@ class indeed_resumes(object):
 		self.fixed_test_url = 'http://www.indeed.com/resumes?q=excel&co='+self.country_code
 		self.url_ = 'http://www.indeed.com/resumes%s'
 		self.user_agents_cycle = cycle(user_agents)
-		self.max_recursion_depth = 5
+		self.max_recursion_depth = 7
 		self.time_all = []
 
 	def init_redis(self):
@@ -179,6 +179,7 @@ class indeed_resumes(object):
 
 	
 	def begin(self):
+		keyws = []
 		sorts = ['sort=date', '']
 		keywords_done_idx = self.index
 		#keywords_done_idx = self.r_master.get(self.country_code) #--this over here should talk to master's redis
@@ -189,13 +190,14 @@ class indeed_resumes(object):
 			keywords_done_idx = int(keywords_done_idx)
 		
 		for i, keyword in enumerate(self.keywords):
+			keyws.append(keyword)
 			keyword = keyword.replace('\n', '')
 			if i <= keywords_done_idx:
 				continue
 			else:
 				print 'now working on..%d in begin..' % i 
 				for sort in sorts:
-					self.resource_collection(i, self.keywords[i], sort)
+					self.resource_collection(i, keyws[i], sort)
 				#--checking the block
 				if sum(map(lambda p: p[1], self.time_all[-4:])) == 0 and len(self.time_all) > 4:
 					check = self.get_static_resource(self.fixed_test_url)
