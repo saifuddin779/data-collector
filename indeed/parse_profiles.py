@@ -189,7 +189,6 @@ class indeed_resumes(object):
 			keywords_done_idx = int(keywords_done_idx)
 		
 		for i, keyword in enumerate(self.keywords):
-			keyws.append(keyword)
 			keyword = keyword.replace('\n', '')
 			if i <= keywords_done_idx:
 				continue
