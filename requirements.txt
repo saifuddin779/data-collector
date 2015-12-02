@@ -1,4 +1,6 @@
 requests
 redis
 pyquery
+uwsgi
+flask
 skiff
