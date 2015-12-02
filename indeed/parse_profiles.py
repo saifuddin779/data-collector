@@ -88,7 +88,7 @@ class indeed_resumes(object):
 					n_profiles[unique_id] = city_
 					profile_data = indeed_resumes_details(unique_id).resource_collection()
 					self.save_to_disk(profile_data, unique_id)
-					#n_all += 1
+					n_all += 1
 
 			# db_success = False
 			# while not db_success:
