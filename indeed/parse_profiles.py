@@ -60,7 +60,7 @@ class indeed_resumes(object):
 		keyword = '%s' % keyword.replace('/', ' ')
 		keyword = keyword.strip('\n')
 		init_url = self.init_url % (keyword.replace(' ', '+'), 0, 50)
-		
+				
 		filtering_urls, result_count  = self.get_filter_urls(init_url, 0)
 		
 		if result_count >= 1000:
@@ -127,7 +127,9 @@ class indeed_resumes(object):
 				slp(10)
 				pass
 		if resp.status_code == 200 or len(self.get_static_resource(self.fixed_test_url)):
+			
 			filtering_urls = pq_(resp.text)
+			
 			count =  filtering_urls('#search_header #rezsearch #search_table #result_count').text().split(' ')[0].replace(',', '')
 			filtering_urls = filtering_urls('.refinement')
 			if count.isdigit():
