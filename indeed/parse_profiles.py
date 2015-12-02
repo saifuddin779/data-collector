@@ -242,5 +242,5 @@ if __name__ == '__main__':
 	country_code = sys.argv[1]
 	master = sys.argv[2]
 	index = sys.argv[3]
-	obj = indeed_resumes(country_code, master, index, next_node_index)
+	obj = indeed_resumes(country_code, master, index)
 	obj.begin()
