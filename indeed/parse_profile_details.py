@@ -84,7 +84,7 @@ class indeed_resumes_details(object):
 				resp = requests.get(url_, headers = {'user_agent': user_agent})
 			except Exception, e:
 				print str(e), '~~~'
-				slp(100)
+				slp(2)
 				pass
 
 		if resp.status_code == 200:
