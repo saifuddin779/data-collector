@@ -13,9 +13,10 @@ def index():
 def begin():
 	index = int(request.args['index'])
 	country_code = request.args['country_code'].encode('utf-8')
-	command = "tmux send -t scrap_session.0 'python parse_profiles.py %s prod %d' ENTER" % (country_code, index)
+	#command = "tmux send -t scrap_session.0 'python parse_profiles.py %s prod %d' ENTER" % (country_code, index)
+	commans = "tmux send -t scrap_session:1.0 'python parse_profiles.py %s prod %d' ENTER" % (country_code, index)
 	p = Popen(command, shell=True, stdout=PIPE, stderr=STDOUT, bufsize=1, close_fds=True)
-	return {'status': True}
+	return json.dumps({'status': True})
 
 if __name__ == '__main__':
 	app.run(host='0.0.0.0')
