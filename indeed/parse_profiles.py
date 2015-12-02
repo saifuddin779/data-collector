@@ -18,6 +18,13 @@ data_dir = '../../data/'
 locale.setlocale( locale.LC_ALL, 'en_US.UTF-8' ) 
 skillset = configs['skills_file'] #--change this to change the filename
 
+nodes_index = {
+				'indeed-master-01': {'index': 1, 'ip': '104.131.30.114', 'next': 'indeed-master-02'},
+				'indeed-master-02': {'index': 2, 'ip': '162.243.8.180', 'next': 'indeed-master-03'},
+				'indeed-master-03': {'index': 3, 'ip': '159.203.126.194', 'next': 'indeed-master-01'}
+			  }
+
+
 class indeed_resumes(object):
 	def __init__(self, country_code, master, index):
 		self.country_code = country_code
@@ -179,6 +186,7 @@ class indeed_resumes(object):
 
 	
 	def begin(self):
+		job_start_time = tm()
 		sorts = ['sort=date', '']
 		keywords_done_idx = self.index
 		#keywords_done_idx = self.r_master.get(self.country_code) #--this over here should talk to master's redis
@@ -189,7 +197,8 @@ class indeed_resumes(object):
 			keywords_done_idx = int(keywords_done_idx)
 		
 		for i, keyword in enumerate(self.keywords):
-			keyword = keyword.replace('\n', '')
+			#keyword = keyword.replace('\n', '')
+			keyword = "'"
 			if i <= keywords_done_idx:
 				continue
 			else:
@@ -203,15 +212,21 @@ class indeed_resumes(object):
 						print 'putting to sleep for 10 mins because last 4 keywords went nill and check indicated block..'
 						print 'currently worked at .. %d' % i
 						slp(1200)
-
-				#self.r_master.set(self.country_code, i)
-		#self.send_to_master()
-		#self.r_master.hset('droplets', socket.gethostname(),  True)
-		#print 'sent db to master...terminating..'
-		self.keywords.close()
-		sys.exit()
-		return
-
+				#--switching to the sibling node every hour
+				time_right_now = tm()
+				if (time_right_now - job_start_time) >= 100:
+					host_name = socket.gethostname() #--get current hostname
+					
+					sibling_name = nodes_index[host_name]['next'] #--get its sibling name
+					sibling_ip = nodes_index[sibling_name]['ip'] #--get the siblings ip
+					sibling_url = 'http://%s:5000/begin/' % sibling_ip
+					payload = {'index': i, 'country_code': self.country_code} #--index of the keyword in process
+					r = requests.get(sibling_url, params=payload) #--ask the sibling to begin collection from the given index
+					if r.status_code == 200:
+						print r.text
+						print '%s closing at %d..will begin soon..' % (host_name, i)
+					self.keywords.close()
+					return
 
 	def send_to_master(self):
 		host_name = socket.gethostname()
@@ -227,5 +242,5 @@ if __name__ == '__main__':
 	country_code = sys.argv[1]
 	master = sys.argv[2]
 	index = sys.argv[3]
-	obj = indeed_resumes(country_code, master, index)
+	obj = indeed_resumes(country_code, master, index, next_node_index)
 	obj.begin()
