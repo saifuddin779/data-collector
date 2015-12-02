@@ -216,7 +216,7 @@ class indeed_resumes(object):
 
 				#--switching to the sibling node every hour
 				time_right_now = tm()
-				if (time_right_now - job_start_time) >= 100:
+				if (time_right_now - job_start_time) >= 30:
 					host_name = socket.gethostname() #--get current hostname
 					
 					sibling_name = nodes_index[host_name]['next'] #--get its sibling name
