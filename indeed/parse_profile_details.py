@@ -78,13 +78,12 @@ class indeed_resumes_details(object):
 	def get_resource(self, url_):
 		data = []
 		resp = None
-		while not resp:
-			try:
-				user_agent = self.user_agents_cycle.next()
-				resp = requests.get(url_, headers = {'user_agent': user_agent})
-			except Exception, e:
-				print str(e), '~~~'
-				pass
+		try:
+			user_agent = self.user_agents_cycle.next()
+			resp = requests.get(url_, headers = {'user_agent': user_agent})
+		except Exception, e:
+			print '%s not exists..' % url_
+			return data
 
 		if resp.status_code == 200:
 			data = pq_(resp.text)
