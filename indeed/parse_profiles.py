@@ -206,14 +206,14 @@ class indeed_resumes(object):
 				for sort in sorts:
 					self.resource_collection(i, keyword, sort)
 
-				# #--checking the block
-				# if sum(map(lambda p: p[1], self.time_all[-2:])) == 0 and len(self.time_all) > 2:
-				# 	check = self.get_static_resource(self.fixed_test_url)
-				# 	if not len(check):
-				# 		print 'putting to sleep for 10 mins because last 4 keywords went nill and check indicated block..'
-				# 		print 'currently worked at .. %d' % i
-				# 		slp(1200)
-						
+				#--checking the block
+				if sum(map(lambda p: p[1], self.time_all[-2:])) == 0 and len(self.time_all) > 2:
+					check = self.get_static_resource(self.fixed_test_url)
+					if not len(check):
+						print 'putting to sleep for 10 mins because last 4 keywords went nill and check indicated block..'
+						print 'currently worked at .. %d' % i
+						slp(50)
+
 				#--switching to the sibling node every hour
 				time_right_now = tm()
 				if (time_right_now - job_start_time) >= 100:
