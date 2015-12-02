@@ -17,7 +17,8 @@ def begin():
 	command = "tmux send -t scrap_session:1.0 'python parse_profiles.py %s prod %d' ENTER" % (country_code, index)
 	#p = Popen(command, shell=True, stdout=PIPE, stderr=STDOUT, bufsize=1, close_fds=True)
 	execute = call([command], shell=True)
-	return 1
+	response = json.dumps({'status': True})
+	return response
 
 if __name__ == '__main__':
 	app.run(host='0.0.0.0')
