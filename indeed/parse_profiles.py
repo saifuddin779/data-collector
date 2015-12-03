@@ -60,7 +60,7 @@ class indeed_resumes(object):
 		keyword = '%s' % keyword.replace('/', ' ')
 		keyword = keyword.strip('\n')
 		init_url = self.init_url % (keyword.replace(' ', '+'), 0, 50)
-		
+				
 		filtering_urls, result_count  = self.get_filter_urls(init_url, 0)
 		
 		if result_count >= 1000:
@@ -78,16 +78,22 @@ class indeed_resumes(object):
 					beg = end
 					end = end+100
 				postfix = '&start=%d&limit=%d&radius=100&%s&co=%s' % (beg, end, sort, self.country_code)	
-				print url_+postfix	
+				print url_+postfix
+				t_res1 = tm()
 				data = self.get_resource(url_+postfix, 0)
+				t_res2 = tm()
+				print 'data is here in %d secs..' % int(t_res2 - t_res1)
 
 				for each in data:
 					item = pq_(each)
 					unique_id = item.attr('id')
-					city_ = item('.location').text()
-					n_profiles[unique_id] = city_
+					#city_ = item('.location').text()
+					#n_profiles[unique_id] = city_
+					t_prf1 = tm()
 					profile_data = indeed_resumes_details(unique_id).resource_collection()
 					self.save_to_disk(profile_data, unique_id)
+					t_prf2 = tm()
+					print 'profile saved in %d secs..' % int(t_prf2 - t_prf1)
 					n_all += 1
 
 			# db_success = False
@@ -117,16 +123,23 @@ class indeed_resumes(object):
 			return ([], 0)
 		
 		filtering_urls = []
-		resp = None
-		while not resp:
-			try:
-				user_agent = self.user_agents_cycle.next()
-				resp = requests.get(init_url, headers = {'user_agent': user_agent})
-			except Exception, e:
-				print str(e), '###'
-				slp(10)
-				pass
-		if resp.status_code == 200 or len(self.get_static_resource(self.fixed_test_url)):
+		# resp = None
+		# while not resp:
+		# 	try:
+		# 		user_agent = self.user_agents_cycle.next()
+		# 		resp = requests.get(init_url, headers = {'user_agent': user_agent})
+		# 	except Exception, e:
+		# 		print str(e), '###'
+		# 		slp(10)
+		# 		pass
+		try:
+			user_agent = self.user_agents_cycle.next()
+			resp = requests.get(init_url, headers = {'user_agent': user_agent})
+		except Exception, e:
+			print str(e), '###'
+			return (filtering_urls, 0)
+
+		if resp.status_code == 200:#or len(self.get_static_resource(self.fixed_test_url)):
 			filtering_urls = pq_(resp.text)
 			count =  filtering_urls('#search_header #rezsearch #search_table #result_count').text().split(' ')[0].replace(',', '')
 			filtering_urls = filtering_urls('.refinement')
@@ -136,8 +149,8 @@ class indeed_resumes(object):
 				count = 0
 			return (filtering_urls, count)
 		else:
-			slp(1)
 			return self.get_filter_urls(init_url, counter+1)
+
 
 	def get_resource(self, url_, counter):
 		if counter >= self.max_recursion_depth:
@@ -145,22 +158,31 @@ class indeed_resumes(object):
 			#slp(300)
 			return []
 		data = []
-		resp = None
-		while not resp:
-			try:
-				user_agent = self.user_agents_cycle.next()
-				resp = requests.get(url_, headers = {'user_agent': user_agent})
-			except Exception, e:
-				print str(e), '@@@'
-				slp(10)
-				pass
-		if resp.status_code == 200 or len(self.get_static_resource(self.fixed_test_url)):
+
+		# resp = None
+		# while not resp:
+		# 	try:
+		# 		user_agent = self.user_agents_cycle.next()
+		# 		resp = requests.get(url_, headers = {'user_agent': user_agent})
+		# 	except Exception, e:
+		# 		print str(e), '@@@'
+		# 		slp(10)
+		# 		pass
+
+		try:
+			user_agent = self.user_agents_cycle.next()
+			resp = requests.get(url_, headers = {'user_agent': user_agent})
+		except Exception, e:
+			print str(e), '@@@'
+			return data
+
+		if resp.status_code == 200:#or len(self.get_static_resource(self.fixed_test_url)):
 			data = pq_(resp.text)
 			data = data('#results').children()
 			return data
 		else:
-			slp(1)
 			return self.get_resource(url_, counter+1)
+
 
 	def get_static_resource(self, url):
 		data = []
