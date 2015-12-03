@@ -83,8 +83,7 @@ class indeed_resumes(object):
 					beg = end
 					end = end+100
 				postfix = '&start=%d&limit=%d&radius=100&%s&co=%s' % (beg, end, sort, self.country_code)
-
-				print url_+postfix
+				#print url_+postfix
 				routes_container.append(url_+postfix)
 
 			t_res1 = tm()
