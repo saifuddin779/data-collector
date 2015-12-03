@@ -66,14 +66,20 @@ class indeed_resumes(object):
 		init_url = self.init_url % (keyword.replace(' ', '+'), 0, 50)
 		filtering_urls, result_count  = self.get_filter_urls(init_url, 0)
 		
-		if result_count >= 1000:
-			counter = 10
-		else:
-			counter = int(max(float(result_count)/100, 1))
-		
 		for route in filtering_urls:
 			n_all = 0
 			url_ = self.url_ % pq_(route).children('a').attr('href')
+			count = pq_(route).children('span').text().replace('+', '')
+			if count.isdigit():
+				count = int(count)
+			else:
+				count = 0
+
+			if count >= 1000:
+				counter = 10
+			else:
+				counter = int(max(float(count)/100, 1))
+
 			routes_container = []
 			for i in range(counter):
 				if i == 0:
@@ -83,7 +89,7 @@ class indeed_resumes(object):
 					beg = end
 					end = end+100
 				postfix = '&start=%d&limit=%d&radius=100&%s&co=%s' % (beg, end, sort, self.country_code)
-				#print url_+postfix
+				print url_+postfix
 				routes_container.append(url_+postfix)
 
 			t_res1 = tm()
@@ -135,7 +141,6 @@ class indeed_resumes(object):
 			final_all += n_all
 			gc.collect()
 
-		
 		current_time = tm()
 		self.time_all.append((keyword, final_all, current_time - start_time))
 		print 'current time passed..%d secs for one round of %s (%d)' % (int(current_time - begin_time), keyword, keyword_index)
@@ -168,7 +173,8 @@ class indeed_resumes(object):
 
 		if resp.status_code == 200:#or len(self.get_static_resource(self.fixed_test_url)):
 			filtering_urls = pq_(resp.text)
-			count =  filtering_urls('#search_header #rezsearch #search_table #result_count').text().split(' ')[0].replace(',', '')
+			#count =  filtering_urls('#search_header #rezsearch #search_table #result_count').text().split(' ')[0].replace(',', '')
+			count = '0'
 			filtering_urls = filtering_urls('.refinement')
 			if count.isdigit():
 				count = int(count)
@@ -254,7 +260,7 @@ class indeed_resumes(object):
 	
 	def begin(self):
 		job_start_time = tm()
-		sorts = ['sort=date', '']
+		#sorts = ['sort=date', '']
 		keywords_done_idx = self.index
 		#keywords_done_idx = self.r_master.get(self.country_code) #--this over here should talk to master's redis
 		print 'starting from %s' % str(keywords_done_idx)
@@ -269,20 +275,21 @@ class indeed_resumes(object):
 				continue
 			else:
 				print 'now working on..%d in begin..' % i 
-				for sort in sorts:
-					self.resource_collection(i, keyword, sort)
-
+				#for sort in sorts:
+				self.resource_collection(i, keyword, '')
+				slp(60)
+				print 'sleeping after %d for a minute to relax..' % i
 				#--checking the block
 				if sum(map(lambda p: p[1], self.time_all[-2:])) == 0 and len(self.time_all) > 2:
 					check = self.get_static_resource(self.fixed_test_url)
 					if not len(check):
-						print 'putting to sleep for 10 mins because last 4 keywords went nill and check indicated block..'
+						print 'putting to sleep for 10 mins because last 2 keywords went nill and check indicated block..'
 						print 'currently worked at .. %d' % i
-						slp(50)
+						slp(60)
 
-				#--switching to the sibling node every hour
+				#--switching to the sibling node every 20 mins
 				time_right_now = tm()
-				if (time_right_now - job_start_time) >= 60:
+				if (time_right_now - job_start_time) >= 60*20:
 					host_name = socket.gethostname() #--get current hostname
 					
 					sibling_name = nodes_index[host_name]['next'] #--get its sibling name

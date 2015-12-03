@@ -38,7 +38,6 @@ class indeed_resumes_details(object):
 		urls_ = map(lambda k: browse_url_profile_details % k, self.unique_ids)
 		urls_ = self.chunk_it(urls_, 10)
 		urls_ = filter(lambda p: len(p), urls_)
-		print urls_
 		for urls_chunks in urls_:
 			profiles_html = self.get_resource(urls_chunks, 0)
 			profiles_parsed = self.extract_details(profiles_html)
@@ -193,10 +192,10 @@ def save_profiles(db_file, index=False):
 
 
 
-if __name__ == '__main__':
-	#save_profiles('../../backup/indeed-master-01.db')
-	obj = indeed_resumes_details(['c3a2e69dd2e2ea83', 'c90082b543072ed3'])
-	data = obj.resource_collection()
-	for i in data:
-		print i
-		print '--------'
+# if __name__ == '__main__':
+# 	#save_profiles('../../backup/indeed-master-01.db')
+# 	obj = indeed_resumes_details(['c3a2e69dd2e2ea83', 'c90082b543072ed3'])
+# 	data = obj.resource_collection()
+# 	for i in data:
+# 		print i
+# 		print '--------'
