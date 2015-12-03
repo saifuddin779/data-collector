@@ -1,6 +1,7 @@
 import sys, os, json, ast, requests, grequests
 from time import time as tm, sleep as slp
 from datetime import datetime as dt
+from compiler.ast import flatten
 from itertools import cycle
 import sqlite3 as  sql
 
@@ -33,10 +34,17 @@ class indeed_resumes_details(object):
 
 	def resource_collection(self):
 		#url_ = browse_url_profile_details % self.unique_id
+		profiles_parsed_final = []
 		urls_ = map(lambda k: browse_url_profile_details % k, self.unique_ids)
-		profiles_html = self.get_resource(urls_, 0)
-		profiles_parsed = self.extract_details(profiles_html)
-		return profiles_parsed
+		urls_ = self.chunk_it(urls_, 10)
+		urls_ = filter(lambda p: len(p), urls_)
+		print urls_
+		for urls_chunks in urls_:
+			profiles_html = self.get_resource(urls_chunks, 0)
+			profiles_parsed = self.extract_details(profiles_html)
+			for each_profile in profiles_parsed:
+				profiles_parsed_final.append(profiles_parsed)
+		return flatten(profiles_parsed_final)
 
 
 	def extract_details(self, profiles_html):
@@ -80,6 +88,16 @@ class indeed_resumes_details(object):
 			profiles_parsed.append(details)
 		return profiles_parsed
 
+	def chunk_it(self, seq, num):
+		avg = len(seq) / float(num)
+	  	out = []
+	  	last = 0.0
+
+	  	while last < len(seq):
+	  		out.append(seq[int(last):int(last + avg)])
+	  		last += avg
+	  	return out
+
 	def get_resource(self, urls_, counter):
 		if counter >= self.max_recursion_depth:
 			print 'max recursion depth achieved in the profile get_resource'
@@ -94,9 +112,6 @@ class indeed_resumes_details(object):
 			return self.get_resource(urls_, counter+1)
 
 		if results:
-			print len(results), len(urls_)
-			# if abs(len(results) - len(urls_)) > 2:
-			# 	 return self.get_resource(urls_, counter+1)
 			for resp in results:
 				if resp:
 					if resp.status_code == 200:
@@ -178,10 +193,10 @@ def save_profiles(db_file, index=False):
 
 
 
-# if __name__ == '__main__':
-# 	#save_profiles('../../backup/indeed-master-01.db')
-# 	obj = indeed_resumes_details(['c3a2e69dd2e2ea83', 'c90082b543072ed3'])
-# 	data = obj.resource_collection()
-# 	for i in data:
-# 		print i
-# 		print '--------'
+if __name__ == '__main__':
+	#save_profiles('../../backup/indeed-master-01.db')
+	obj = indeed_resumes_details(['c3a2e69dd2e2ea83', 'c90082b543072ed3'])
+	data = obj.resource_collection()
+	for i in data:
+		print i
+		print '--------'
