@@ -78,16 +78,22 @@ class indeed_resumes(object):
 					beg = end
 					end = end+100
 				postfix = '&start=%d&limit=%d&radius=100&%s&co=%s' % (beg, end, sort, self.country_code)	
-				print url_+postfix	
+				print url_+postfix
+				t_res1 = tm()
 				data = self.get_resource(url_+postfix, 0)
+				t_res2 = tm()
+				print 'data is here in %d secs..' % int(t_res2 - t_res1)
 
 				for each in data:
 					item = pq_(each)
 					unique_id = item.attr('id')
-					city_ = item('.location').text()
-					n_profiles[unique_id] = city_
+					#city_ = item('.location').text()
+					#n_profiles[unique_id] = city_
+					t_prf1 = tm()
 					profile_data = indeed_resumes_details(unique_id).resource_collection()
 					self.save_to_disk(profile_data, unique_id)
+					t_prf2 = tm()
+					print 'profile saved in %d secs..' % int(t_prf2 - t_prf1)
 					n_all += 1
 
 			# db_success = False
@@ -144,7 +150,7 @@ class indeed_resumes(object):
 			return (filtering_urls, count)
 		else:
 			return self.get_filter_urls(init_url, counter+1)
-			
+
 
 	def get_resource(self, url_, counter):
 		if counter >= self.max_recursion_depth:
