@@ -59,12 +59,11 @@ class indeed_resumes(object):
 
 	def resource_collection(self, keyword_index, keyword, sort, rest_kewords=False):
 		start_time = tm()
-		n_all = 0
 		n_profiles = {}
+		final_all = 0
 		keyword = '%s' % keyword.replace('/', ' ')
 		keyword = keyword.strip('\n')
 		init_url = self.init_url % (keyword.replace(' ', '+'), 0, 50)
-				
 		filtering_urls, result_count  = self.get_filter_urls(init_url, 0)
 		
 		if result_count >= 1000:
@@ -73,6 +72,7 @@ class indeed_resumes(object):
 			counter = int(max(float(result_count)/100, 1))
 		
 		for route in filtering_urls:
+			n_all = 0
 			url_ = self.url_ % pq_(route).children('a').attr('href')
 			routes_container = []
 			for i in range(counter):
@@ -129,14 +129,15 @@ class indeed_resumes(object):
 			# 		print 'db locked..will wait for 5 secs and try again..'
 			# 		slp(5)
 			# 		pass
-			print 'inserted %d records to db.. %s, %d' % (n_all, keyword, keyword_index)	
-			n_all = 0
+			print 'inserted %d records to db.. %s, %d' % (n_all, keyword, keyword_index)
 			n_profiles = {}
 			slp(2) #--sleeping for 2 secs for every filter for not making calls too fast and get blocked quickly
+			final_all += n_all
 			gc.collect()
+
 		
 		current_time = tm()
-		self.time_all.append((keyword, n_all, current_time - start_time))
+		self.time_all.append((keyword, final_all, current_time - start_time))
 		print 'current time passed..%d secs for one round of %s (%d)' % (int(current_time - begin_time), keyword, keyword_index)
 		return
 	
