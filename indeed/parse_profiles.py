@@ -117,19 +117,24 @@ class indeed_resumes(object):
 			return ([], 0)
 		
 		filtering_urls = []
-		resp = None
-		while not resp:
-			try:
-				user_agent = self.user_agents_cycle.next()
-				resp = requests.get(init_url, headers = {'user_agent': user_agent})
-			except Exception, e:
-				print str(e), '###'
-				slp(10)
-				pass
-		if resp.status_code == 200 or len(self.get_static_resource(self.fixed_test_url)):
-			
+		# resp = None
+		# while not resp:
+		# 	try:
+		# 		user_agent = self.user_agents_cycle.next()
+		# 		resp = requests.get(init_url, headers = {'user_agent': user_agent})
+		# 	except Exception, e:
+		# 		print str(e), '###'
+		# 		slp(10)
+		# 		pass
+		try:
+			user_agent = self.user_agents_cycle.next()
+			resp = requests.get(init_url, headers = {'user_agent': user_agent})
+		except Exception, e:
+			print str(e), '###'
+			return (filtering_urls, 0)
+
+		if resp.status_code == 200:#or len(self.get_static_resource(self.fixed_test_url)):
 			filtering_urls = pq_(resp.text)
-			
 			count =  filtering_urls('#search_header #rezsearch #search_table #result_count').text().split(' ')[0].replace(',', '')
 			filtering_urls = filtering_urls('.refinement')
 			if count.isdigit():
@@ -138,8 +143,8 @@ class indeed_resumes(object):
 				count = 0
 			return (filtering_urls, count)
 		else:
-			slp(1)
 			return self.get_filter_urls(init_url, counter+1)
+			
 
 	def get_resource(self, url_, counter):
 		if counter >= self.max_recursion_depth:
@@ -147,22 +152,31 @@ class indeed_resumes(object):
 			#slp(300)
 			return []
 		data = []
-		resp = None
-		while not resp:
-			try:
-				user_agent = self.user_agents_cycle.next()
-				resp = requests.get(url_, headers = {'user_agent': user_agent})
-			except Exception, e:
-				print str(e), '@@@'
-				slp(10)
-				pass
-		if resp.status_code == 200 or len(self.get_static_resource(self.fixed_test_url)):
+
+		# resp = None
+		# while not resp:
+		# 	try:
+		# 		user_agent = self.user_agents_cycle.next()
+		# 		resp = requests.get(url_, headers = {'user_agent': user_agent})
+		# 	except Exception, e:
+		# 		print str(e), '@@@'
+		# 		slp(10)
+		# 		pass
+
+		try:
+			user_agent = self.user_agents_cycle.next()
+			resp = requests.get(url_, headers = {'user_agent': user_agent})
+		except Exception, e:
+			print str(e), '@@@'
+			return data
+
+		if resp.status_code == 200:#or len(self.get_static_resource(self.fixed_test_url)):
 			data = pq_(resp.text)
 			data = data('#results').children()
 			return data
 		else:
-			slp(1)
 			return self.get_resource(url_, counter+1)
+
 
 	def get_static_resource(self, url):
 		data = []
