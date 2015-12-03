@@ -82,7 +82,7 @@ class indeed_resumes(object):
 				t_res1 = tm()
 				data = self.get_resource(url_+postfix, 0)
 				t_res2 = tm()
-				print 'data is here in %d secs..' % int(t_res2 - t_res1)
+				print 'data is here in %f secs..--> %d' % (float(t_res2 - t_res1), len(data))
 
 				for each in data:
 					item = pq_(each)
@@ -93,7 +93,7 @@ class indeed_resumes(object):
 					profile_data = indeed_resumes_details(unique_id).resource_collection()
 					self.save_to_disk(profile_data, unique_id)
 					t_prf2 = tm()
-					print 'profile saved in %d secs..' % int(t_prf2 - t_prf1)
+					print 'profile saved in %f secs.. --> %d' % (float(t_prf2 - t_prf1), len(profile_data))
 					n_all += 1
 
 			# db_success = False
