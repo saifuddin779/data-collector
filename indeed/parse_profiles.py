@@ -109,7 +109,8 @@ class indeed_resumes(object):
 				# unique_id = item.attr('id')
 				# profile_set.append(unique_id)
 				# print unique_id
-			
+
+			slp(10)
 			profile_set = filter(lambda n: n  != None, profile_set)
 			t_prf1 = tm()
 			profile_data = indeed_resumes_details(profile_set).resource_collection()
