@@ -1,4 +1,4 @@
-import sys, os, requests, random, string, json, locale, gc, socket, subprocess
+import sys, os, requests, random, string, json, locale, gc, socket, subprocess, grequests
 from time import time as tm, sleep as slp
 from itertools import cycle
 
@@ -43,14 +43,18 @@ class indeed_resumes(object):
 			self.r_host.set('all_count', 0)
 		return
 
-	def save_to_disk(self, data, unique_id):
-		directory = '../../data/resumes/%s' % unique_id[0:2]
-		if not os.path.exists(directory):
-			os.makedirs(directory)
-		filename = '%s/%s.json' % (directory, unique_id)
-		f = open(filename, 'wb')
-		f.write(json.dumps(data))
-		f.close()
+	def save_to_disk(self, data):
+		if data:
+			try:
+				directory = '../../data/resumes/%s' % data['unique_id'][0:2]
+			except:
+				return
+			if not os.path.exists(directory):
+				os.makedirs(directory)
+			filename = '%s/%s.json' % (directory, data['unique_id'])
+			f = open(filename, 'wb')
+			f.write(json.dumps(data))
+			f.close()
 		return
 
 	def resource_collection(self, keyword_index, keyword, sort, rest_kewords=False):
@@ -70,6 +74,7 @@ class indeed_resumes(object):
 		
 		for route in filtering_urls:
 			url_ = self.url_ % pq_(route).children('a').attr('href')
+			routes_container = []
 			for i in range(counter):
 				if i == 0:
 					beg = i
@@ -77,24 +82,43 @@ class indeed_resumes(object):
 				else:
 					beg = end
 					end = end+100
-				postfix = '&start=%d&limit=%d&radius=100&%s&co=%s' % (beg, end, sort, self.country_code)	
-				print url_+postfix
-				t_res1 = tm()
-				data = self.get_resource(url_+postfix, 0)
-				t_res2 = tm()
-				print 'data is here in %f secs..--> %d' % (float(t_res2 - t_res1), len(data))
+				postfix = '&start=%d&limit=%d&radius=100&%s&co=%s' % (beg, end, sort, self.country_code)
 
-				for each in data:
-					item = pq_(each)
-					unique_id = item.attr('id')
-					#city_ = item('.location').text()
-					#n_profiles[unique_id] = city_
-					t_prf1 = tm()
-					profile_data = indeed_resumes_details(unique_id).resource_collection()
-					self.save_to_disk(profile_data, unique_id)
-					t_prf2 = tm()
-					print 'profile saved in %f secs.. --> %d' % (float(t_prf2 - t_prf1), len(profile_data))
-					n_all += 1
+				print url_+postfix
+				routes_container.append(url_+postfix)
+
+			t_res1 = tm()
+			#data = self.get_resource(url_+postfix, 0)
+			data = self.get_resource(routes_container, 0)
+			#data =[]
+			# for i_ in routes_container:
+			# 	data.append(self.get_resource2(i_, 0))
+
+			t_res2 = tm()
+			
+			print 'data is here in %f secs..--> %d' % (float(t_res2 - t_res1), len(data))
+
+			profile_set = []
+			for data_ in data:
+				for id_set in data_:
+					for unique_id in id_set:
+						#print unique_id
+						profile_set.append(unique_id)
+						n_all += 1
+
+				# item = pq_(each)
+				# unique_id = item.attr('id')
+				# profile_set.append(unique_id)
+				# print unique_id
+			
+			profile_set = filter(lambda n: n  != None, profile_set)
+			t_prf1 = tm()
+			profile_data = indeed_resumes_details(profile_set).resource_collection()
+			for profile in profile_data:
+				self.save_to_disk(profile)
+			t_prf2 = tm()
+			print 'profiles saved in %f secs.. --> %d' % (float(t_prf2 - t_prf1), len(profile_data))
+			
 
 			# db_success = False
 			# while not db_success:
@@ -105,11 +129,12 @@ class indeed_resumes(object):
 			# 		print 'db locked..will wait for 5 secs and try again..'
 			# 		slp(5)
 			# 		pass
-			print 'inserted %d records to db.. %s, %d' % (len(n_profiles), keyword, keyword_index)	
+			print 'inserted %d records to db.. %s, %d' % (n_all, keyword, keyword_index)	
+			n_all = 0
 			n_profiles = {}
 			slp(2) #--sleeping for 2 secs for every filter for not making calls too fast and get blocked quickly
 			gc.collect()
-		gc.collect()
+		
 		current_time = tm()
 		self.time_all.append((keyword, n_all, current_time - start_time))
 		print 'current time passed..%d secs for one round of %s (%d)' % (int(current_time - begin_time), keyword, keyword_index)
@@ -152,22 +177,39 @@ class indeed_resumes(object):
 			return self.get_filter_urls(init_url, counter+1)
 
 
-	def get_resource(self, url_, counter):
+	def get_resource(self, routes_container, counter):
 		if counter >= self.max_recursion_depth:
 			print 'max recursion depth achieved in the get_resource'
 			#slp(300)
 			return []
 		data = []
+		results = None
+		try:
+			unsent_request = (grequests.get(url) for url in routes_container)
+			results = grequests.map(unsent_request)
+		except Exception, e:
+			print str(e), '@@@'
+			return self.get_resource(routes_container, counter+1)
+		if results:
+			for resp in results:
+				if resp.status_code == 200:
+					html = pq_(resp.text)
+					html = html('#results').children()
+					data_ = []
+					for each in html:
+						data_.append(pq_(each).attr('id'))
+					data.append(data_)
+			return data
+		else:
+			return data
 
-		# resp = None
-		# while not resp:
-		# 	try:
-		# 		user_agent = self.user_agents_cycle.next()
-		# 		resp = requests.get(url_, headers = {'user_agent': user_agent})
-		# 	except Exception, e:
-		# 		print str(e), '@@@'
-		# 		slp(10)
-		# 		pass
+
+	def get_resource2(self, url_, counter):
+		if counter >= self.max_recursion_depth:
+			print 'max recursion depth achieved in the get_resource'
+			#slp(300)
+			return []
+		data = []
 
 		try:
 			user_agent = self.user_agents_cycle.next()
@@ -177,8 +219,10 @@ class indeed_resumes(object):
 			return data
 
 		if resp.status_code == 200:#or len(self.get_static_resource(self.fixed_test_url)):
-			data = pq_(resp.text)
-			data = data('#results').children()
+			html = pq_(resp.text)
+			html = html('#results').children()
+			for each in html:
+				data.append(pq_(each).attr('id'))
 			return data
 		else:
 			return self.get_resource(url_, counter+1)

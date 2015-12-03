@@ -4,3 +4,4 @@ pyquery
 uwsgi
 flask
 skiff
+grequests
