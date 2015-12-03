@@ -98,11 +98,11 @@ class indeed_resumes_details(object):
 			# if abs(len(results) - len(urls_)) > 2:
 			# 	 return self.get_resource(urls_, counter+1)
 			for resp in results:
-				if resp.status_code == 200:
-					data_ = pq_(resp.text)
-					data_ = data_('#resume_body').children()
-					#print len(data_), 'EUUEEU'
-					data.append(data_)
+				if resp:
+					if resp.status_code == 200:
+						data_ = pq_(resp.text)
+						data_ = data_('#resume_body').children()
+						data.append(data_)
 			return data
 		else:
 			return data
