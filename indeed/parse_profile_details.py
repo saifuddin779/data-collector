@@ -81,7 +81,7 @@ class indeed_resumes_details(object):
 		while not resp:
 			try:
 				user_agent = self.user_agents_cycle.next()
-				resp = requests.get(url_, headers = {'user_agent': user_agent})
+				resp = requests.get(url_, headers = {'user_agent': user_agent}, timeout=5)
 			except Exception, e:
 				print str(e), '~~~'
 				return data
@@ -91,7 +91,7 @@ class indeed_resumes_details(object):
 			data = data('#resume_body').children()
 			if not data:
 				user_agent = self.user_agents_cycle.next()
-				resp = requests.get(url_, headers = {'user_agent': user_agent})
+				resp = requests.get(url_, headers = {'user_agent': user_agent}, timeout=5)
 				if resp.status_code == 200:
 					data = pq_(resp.text)
 					data = data('#resume_body').children()
