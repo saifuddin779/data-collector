@@ -196,7 +196,7 @@ class indeed_resumes(object):
 		"""NEW -- PROXIED WAY OF GETTING DATA"""
 		data = []
 		resp = get_data(url_)
-		html = pq_(resp.text)
+		html = pq_(resp)
 		html = html('#results').children()
 		for each in html:
 			data.append(pq_(each).attr('id'))
