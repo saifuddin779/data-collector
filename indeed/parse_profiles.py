@@ -89,7 +89,6 @@ class indeed_resumes(object):
 					beg = end
 					end = end+100
 				postfix = '&start=%d&limit=%d&radius=100&%s&co=%s' % (beg, end, sort, self.country_code)
-				print url_+postfix
 				routes_container.append(url_+postfix)
 
 			t_res1 = tm()
@@ -124,8 +123,6 @@ class indeed_resumes(object):
 				self.save_to_disk(profile)
 			t_prf2 = tm()
 			print 'profiles saved in %f secs.. --> %d' % (float(t_prf2 - t_prf1), len(profile_data))
-			print 'sleeping for 60 secs to avoid anything unusual..'
-
 			# db_success = False
 			# while not db_success:
 			# 	try:
@@ -137,7 +134,7 @@ class indeed_resumes(object):
 			# 		pass
 			print 'inserted %d records to db.. %s, %d' % (n_all, keyword, keyword_index)
 			n_profiles = {}
-			slp(20) #--sleeping for 2 mins for every filter for not making calls too fast and get blocked quickly
+			slp(120) #--sleeping for 2 mins for every filter for not making calls too fast and get blocked quickly
 			final_all += n_all
 			gc.collect()
 
