@@ -137,7 +137,7 @@ class indeed_resumes(object):
 			# 		pass
 			print 'inserted %d records to db.. %s, %d' % (n_all, keyword, keyword_index)
 			n_profiles = {}
-			slp(120) #--sleeping for 2 mins for every filter for not making calls too fast and get blocked quickly
+			slp(20) #--sleeping for 2 mins for every filter for not making calls too fast and get blocked quickly
 			final_all += n_all
 			gc.collect()
 
