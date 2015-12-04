@@ -138,7 +138,7 @@ class indeed_resumes(object):
 			#for profile in profile_data:
 			#	self.save_to_disk(profile)
 			t_prf2 = tm()
-			print 'profiles saved in %f secs.. --> %d' % (float(t_prf2 - t_prf1), len(profile_data))
+			print 'profiles saved in %f secs.. --> %d' % (float(t_prf2 - t_prf1), len(profile_set))
 			print 'inserted %d records to db.. %s, %d' % (n_all, keyword, keyword_index)
 			n_profiles = {}
 			slp(10) #--sleeping for 10 secs for every filter for not making calls too fast and get blocked quickly
