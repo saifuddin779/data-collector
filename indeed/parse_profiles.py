@@ -124,7 +124,7 @@ class indeed_resumes(object):
 				self.save_to_disk(profile)
 			t_prf2 = tm()
 			print 'profiles saved in %f secs.. --> %d' % (float(t_prf2 - t_prf1), len(profile_data))
-			
+			print 'sleeping for 60 secs to avoid anything unusual..'
 
 			# db_success = False
 			# while not db_success:
@@ -137,7 +137,7 @@ class indeed_resumes(object):
 			# 		pass
 			print 'inserted %d records to db.. %s, %d' % (n_all, keyword, keyword_index)
 			n_profiles = {}
-			slp(2) #--sleeping for 2 secs for every filter for not making calls too fast and get blocked quickly
+			slp(120) #--sleeping for 2 mins for every filter for not making calls too fast and get blocked quickly
 			final_all += n_all
 			gc.collect()
 
@@ -180,6 +180,7 @@ class indeed_resumes(object):
 				count = int(count)
 			else:
 				count = 0
+			resp.cookies.clear()
 			return (filtering_urls, count)
 		else:
 			return self.get_filter_urls(init_url, counter+1)
@@ -207,6 +208,7 @@ class indeed_resumes(object):
 					for each in html:
 						data_.append(pq_(each).attr('id'))
 					data.append(data_)
+					resp.cookies.clear()
 			return data
 		else:
 			return data
@@ -251,6 +253,7 @@ class indeed_resumes(object):
 			if resp.status_code == 200:
 				data = pq_(resp.text)
 				data = data('#results').children()
+				resp.cookies.clear()
 				return data
 			else:
 				return data

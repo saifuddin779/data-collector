@@ -43,6 +43,7 @@ class indeed_resumes_details(object):
 			profiles_parsed = self.extract_details(profiles_html)
 			for each_profile in profiles_parsed:
 				profiles_parsed_final.append(profiles_parsed)
+			slp(10)
 		return flatten(profiles_parsed_final)
 
 
