@@ -130,7 +130,7 @@ class indeed_resumes(object):
 						profile_set.append(unique_id)
 						n_all += 1
 			print 'the set is .. %d ids ..' % len(profile_set)
-			slp(10)
+			#slp(10)
 			profile_set = filter(lambda n: n  != None, profile_set)
 			t_prf1 = tm()
 			
