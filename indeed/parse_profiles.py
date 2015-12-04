@@ -1,4 +1,5 @@
-import sys, os, requests, random, string, json, locale, gc, socket, subprocess, grequests
+import sys, os, requests, random, string, json, locale, gc, socket, subprocess
+#import grequests
 from data_getter import get_data
 from time import time as tm, sleep as slp
 from itertools import cycle
@@ -77,7 +78,6 @@ class indeed_resumes(object):
 		init_url = self.init_url % (keyword.replace(' ', '+'), 0, 50)
 		#filtering_urls, result_count  = self.get_filter_urls(init_url, 0)
 		filtering_urls, result_count = self.get_filter_urls_px(init_url, 0)
-		print result_count
 		if result_count < 500:
 			return
 		
@@ -118,6 +118,7 @@ class indeed_resumes(object):
 			for i_ in routes_container:
 				#data.append(self.get_resource2(i_, 0))
 				data.append(self.get_resource_px(i_, 0))
+				slp(2)
 			t_res2 = tm()
 			
 			print 'data is here in %f secs..--> %d' % (float(t_res2 - t_res1), len(data))
