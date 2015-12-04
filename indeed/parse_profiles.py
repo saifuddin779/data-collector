@@ -92,7 +92,6 @@ class indeed_resumes(object):
 				routes_container.append(url_+postfix)
 
 			t_res1 = tm()
-			#data = self.get_resource(url_+postfix, 0)
 			data = self.get_resource(routes_container, 0)
 			#data =[]
 			# for i_ in routes_container:
@@ -106,14 +105,8 @@ class indeed_resumes(object):
 			for data_ in data:
 				for id_set in data_:
 					for unique_id in id_set:
-						#print unique_id
 						profile_set.append(unique_id)
 						n_all += 1
-
-				# item = pq_(each)
-				# unique_id = item.attr('id')
-				# profile_set.append(unique_id)
-				# print unique_id
 
 			slp(10)
 			profile_set = filter(lambda n: n  != None, profile_set)
@@ -123,15 +116,6 @@ class indeed_resumes(object):
 				self.save_to_disk(profile)
 			t_prf2 = tm()
 			print 'profiles saved in %f secs.. --> %d' % (float(t_prf2 - t_prf1), len(profile_data))
-			# db_success = False
-			# while not db_success:
-			# 	try:
-			# 		db_insert_hash(n_profiles, self.country_code)
-			# 		db_success = True
-			# 	except:
-			# 		print 'db locked..will wait for 5 secs and try again..'
-			# 		slp(5)
-			# 		pass
 			print 'inserted %d records to db.. %s, %d' % (n_all, keyword, keyword_index)
 			n_profiles = {}
 			slp(120) #--sleeping for 2 mins for every filter for not making calls too fast and get blocked quickly
@@ -152,15 +136,6 @@ class indeed_resumes(object):
 			return ([], 0)
 		
 		filtering_urls = []
-		# resp = None
-		# while not resp:
-		# 	try:
-		# 		user_agent = self.user_agents_cycle.next()
-		# 		resp = requests.get(init_url, headers = {'user_agent': user_agent})
-		# 	except Exception, e:
-		# 		print str(e), '###'
-		# 		slp(10)
-		# 		pass
 		try:
 			user_agent = self.user_agents_cycle.next()
 			resp = requests.get(init_url, headers = {'user_agent': user_agent})
