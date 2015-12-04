@@ -1,4 +1,5 @@
 import sys, os, requests, random, string, json, locale, gc, socket, subprocess, grequests
+from data_getter import get_data
 from time import time as tm, sleep as slp
 from itertools import cycle
 
@@ -57,6 +58,16 @@ class indeed_resumes(object):
 			f.close()
 		return
 
+	def chunk_it(self, seq, num):
+		avg = len(seq) / float(num)
+	  	out = []
+	  	last = 0.0
+
+	  	while last < len(seq):
+	  		out.append(seq[int(last):int(last + avg)])
+	  		last += avg
+	  	return out
+
 	def resource_collection(self, keyword_index, keyword, sort, rest_kewords=False):
 		start_time = tm()
 		n_profiles = {}
@@ -64,7 +75,11 @@ class indeed_resumes(object):
 		keyword = '%s' % keyword.replace('/', ' ')
 		keyword = keyword.strip('\n')
 		init_url = self.init_url % (keyword.replace(' ', '+'), 0, 50)
-		filtering_urls, result_count  = self.get_filter_urls(init_url, 0)
+		#filtering_urls, result_count  = self.get_filter_urls(init_url, 0)
+		filtering_urls, result_count = self.get_filter_urls_px(init_url, 0)
+		print result_count
+		if result_count < 500:
+			return
 		
 		for route in filtering_urls:
 			n_all = 0
@@ -92,11 +107,17 @@ class indeed_resumes(object):
 				routes_container.append(url_+postfix)
 
 			t_res1 = tm()
-			data = self.get_resource(routes_container, 0)
-			#data =[]
-			# for i_ in routes_container:
-			# 	data.append(self.get_resource2(i_, 0))
 
+			# data = []
+			# routes_container = self.chunk_it(routes_container, 3)
+			# routes_container = filter(lambda p: len(p), routes_container)
+			# for routes_chunk in routes_container:
+			# 	data.append(self.get_resource(routes_chunk, 0))
+			
+			data =[]
+			for i_ in routes_container:
+				#data.append(self.get_resource2(i_, 0))
+				data.append(self.get_resource_px(i_, 0))
 			t_res2 = tm()
 			
 			print 'data is here in %f secs..--> %d' % (float(t_res2 - t_res1), len(data))
@@ -118,7 +139,7 @@ class indeed_resumes(object):
 			print 'profiles saved in %f secs.. --> %d' % (float(t_prf2 - t_prf1), len(profile_data))
 			print 'inserted %d records to db.. %s, %d' % (n_all, keyword, keyword_index)
 			n_profiles = {}
-			slp(120) #--sleeping for 2 mins for every filter for not making calls too fast and get blocked quickly
+			slp(10) #--sleeping for 10 secs for every filter for not making calls too fast and get blocked quickly
 			final_all += n_all
 			gc.collect()
 
@@ -128,6 +149,20 @@ class indeed_resumes(object):
 		print 'total records collected for %s (%d) --> %d' % (keyword, keyword_index, final_all)
 		return
 	
+	def get_filter_urls_px(self, init_url, counter):
+		"""NEW -- PROXIED WAY OF GETTING DATA"""
+		filtering_urls = get_data(init_url)
+		filtering_urls = pq_(resp.text)
+
+		count =  filtering_urls('#search_header #rezsearch #search_table #result_count').text().split(' ')[0].replace(',', '')
+		filtering_urls = filtering_urls('.refinement')
+
+		if count.isdigit():
+			count = int(count)
+		else:
+			count = 0
+		return (filtering_urls, count)
+
 
 	def get_filter_urls(self, init_url, counter):
 		if counter >= self.max_recursion_depth:
@@ -145,8 +180,7 @@ class indeed_resumes(object):
 
 		if resp.status_code == 200:#or len(self.get_static_resource(self.fixed_test_url)):
 			filtering_urls = pq_(resp.text)
-			#count =  filtering_urls('#search_header #rezsearch #search_table #result_count').text().split(' ')[0].replace(',', '')
-			count = '0'
+			count =  filtering_urls('#search_header #rezsearch #search_table #result_count').text().split(' ')[0].replace(',', '')
 			filtering_urls = filtering_urls('.refinement')
 			if count.isdigit():
 				count = int(count)
@@ -157,12 +191,22 @@ class indeed_resumes(object):
 		else:
 			return self.get_filter_urls(init_url, counter+1)
 
+	def get_resource_px(self, url_, counter):
+		"""NEW -- PROXIED WAY OF GETTING DATA"""
+		data = []
+		resp = get_data(url_)
+		html = pq_(resp.text)
+		html = html('#results').children()
+		for each in html:
+			data.append(pq_(each).attr('id'))
+		return data
 
 	def get_resource(self, routes_container, counter):
 		if counter >= self.max_recursion_depth:
 			print 'max recursion depth achieved in the get_resource'
 			#slp(300)
 			return []
+
 		data = []
 		results = None
 		try:
@@ -260,7 +304,7 @@ class indeed_resumes(object):
 					if not len(check):
 						print 'putting to sleep for 10 mins because last 2 keywords went nill and check indicated block..'
 						print 'currently worked at .. %d' % i
-						slp(60)
+						slp(400)
 
 				#--switching to the sibling node every 20 mins
 				time_right_now = tm()

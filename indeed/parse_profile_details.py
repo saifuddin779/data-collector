@@ -8,7 +8,7 @@ import sqlite3 as  sql
 from pyquery import PyQuery as pq_
 from browse import browse_url_profile_details
 from user_agents import user_agents
-
+from data_getter import get_data
 
 data_dir = 'profile_data/'
 
@@ -39,11 +39,12 @@ class indeed_resumes_details(object):
 		urls_ = self.chunk_it(urls_, 10)
 		urls_ = filter(lambda p: len(p), urls_)
 		for urls_chunks in urls_:
-			profiles_html = self.get_resource(urls_chunks, 0)
+			#profiles_html = self.get_resource(urls_chunks, 0)
+			profiles_html = self.get_resource_px(urls_chunks, 0)
 			profiles_parsed = self.extract_details(profiles_html)
 			for each_profile in profiles_parsed:
 				profiles_parsed_final.append(profiles_parsed)
-			slp(10)
+			slp(2)
 		return flatten(profiles_parsed_final)
 
 
@@ -97,6 +98,15 @@ class indeed_resumes_details(object):
 	  		out.append(seq[int(last):int(last + avg)])
 	  		last += avg
 	  	return out
+
+	def get_resource_px(self, urls_, counter):
+		data = []
+		for i in urls_:
+			data_ = pq_(get_data(i))
+			data_ = data_('#resume_body').children()
+			data.append(data)
+		return data
+
 
 	def get_resource(self, urls_, counter):
 		if counter >= self.max_recursion_depth:
@@ -193,10 +203,10 @@ def save_profiles(db_file, index=False):
 
 
 
-# if __name__ == '__main__':
-# 	#save_profiles('../../backup/indeed-master-01.db')
-# 	obj = indeed_resumes_details(['c3a2e69dd2e2ea83', 'c90082b543072ed3'])
-# 	data = obj.resource_collection()
-# 	for i in data:
-# 		print i
-# 		print '--------'
+if __name__ == '__main__':
+	#save_profiles('../../backup/indeed-master-01.db')
+	obj = indeed_resumes_details(['c3a2e69dd2e2ea83', 'c90082b543072ed3'])
+	data = obj.resource_collection()
+	for i in data:
+		print i
+		print '--------'
