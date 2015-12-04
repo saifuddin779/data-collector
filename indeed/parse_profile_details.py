@@ -102,6 +102,7 @@ class indeed_resumes_details(object):
 
 	def get_resource_px(self, urls_, counter):
 		data = []
+		print 'received %d ids to be parsed..' % len(urls_)
 		for i in urls_:
 			data_ = pq_(get_data(i))
 			data_ = data_('#resume_body').children()
