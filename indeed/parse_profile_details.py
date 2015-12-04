@@ -143,11 +143,13 @@ def save_profiles(db_file, index=False):
 	con.close()
 	return
 
-
-"""
 if __name__ == '__main__':
 	#save_profiles('../../backup/indeed-master-01.db')
-	#obj = indeed_resumes_details('c3a2e69dd2e2ea83')
-	#data = obj.resource_collection()
-	#print data
-"""
+	t1 = tm()
+	for i in range(1000):
+		obj = indeed_resumes_details('c3a2e69dd2e2ea83')
+		data = obj.resource_collection()
+		print data
+		slp(.5)
+	t2 = tm()
+	print t2-t1
