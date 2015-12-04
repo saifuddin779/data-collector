@@ -29,8 +29,8 @@ def get_data(url):
                         resp =  request(url)
                         resp_len = len(resp)
                 except:
-                        slp(2)
-                pass
+                        slp(5)
+               		pass
         return resp
 
 

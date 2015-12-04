@@ -1,4 +1,5 @@
-import sys, os, json, ast, requests, grequests
+import sys, os, json, ast, requests
+#import grequests
 from time import time as tm, sleep as slp
 from datetime import datetime as dt
 from compiler.ast import flatten
@@ -104,7 +105,7 @@ class indeed_resumes_details(object):
 		for i in urls_:
 			data_ = pq_(get_data(i))
 			data_ = data_('#resume_body').children()
-			data.append(data)
+			data.append(data_)
 		return data
 
 
