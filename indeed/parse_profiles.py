@@ -152,11 +152,11 @@ class indeed_resumes(object):
 	
 	def get_filter_urls_px(self, init_url, counter):
 		"""NEW -- PROXIED WAY OF GETTING DATA"""
-		filtering_urls = get_data(init_url)
-		filtering_urls = pq_(resp.text)
+		filtering_data = get_data(init_url)
+		filtering_data = pq_(filtering_urls)
 
-		count =  filtering_urls('#search_header #rezsearch #search_table #result_count').text().split(' ')[0].replace(',', '')
-		filtering_urls = filtering_urls('.refinement')
+		count =  filtering_data('#search_header #rezsearch #search_table #result_count').text().split(' ')[0].replace(',', '')
+		filtering_urls = filtering_data('.refinement')
 
 		if count.isdigit():
 			count = int(count)
