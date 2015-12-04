@@ -133,9 +133,10 @@ class indeed_resumes(object):
 			slp(10)
 			profile_set = filter(lambda n: n  != None, profile_set)
 			t_prf1 = tm()
-			profile_data = indeed_resumes_details(profile_set).resource_collection()
-			for profile in profile_data:
-				self.save_to_disk(profile)
+			
+			#profile_data = indeed_resumes_details(profile_set).resource_collection()
+			#for profile in profile_data:
+			#	self.save_to_disk(profile)
 			t_prf2 = tm()
 			print 'profiles saved in %f secs.. --> %d' % (float(t_prf2 - t_prf1), len(profile_data))
 			print 'inserted %d records to db.. %s, %d' % (n_all, keyword, keyword_index)
