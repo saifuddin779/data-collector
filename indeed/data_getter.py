@@ -22,16 +22,16 @@ def renew_connection():
     conn.close()
 
 def get_data(url):
-        resp_len = None
-        while not resp_len:
-                try:
-                        renew_connection()
-                        resp =  request(url)
-                        resp_len = len(resp)
-                except:
-                        slp(5)
-               		pass
-        return resp
+    resp_len = None
+    while not resp_len:
+        try:
+            renew_connection()
+            resp =  request(url)
+            resp_len = len(resp)
+        except:
+            slp(5)
+            pass
+    return resp
 
 
 #data = get_data("http://www.indeed.com/resumes/Boxer?co=US&rb=dt%3Adi")
