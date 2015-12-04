@@ -153,7 +153,7 @@ class indeed_resumes(object):
 	def get_filter_urls_px(self, init_url, counter):
 		"""NEW -- PROXIED WAY OF GETTING DATA"""
 		filtering_data = get_data(init_url)
-		filtering_data = pq_(filtering_urls)
+		filtering_data = pq_(filtering_data)
 
 		count =  filtering_data('#search_header #rezsearch #search_table #result_count').text().split(' ')[0].replace(',', '')
 		filtering_urls = filtering_data('.refinement')
