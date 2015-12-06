@@ -43,10 +43,11 @@ def reset_():
 def get_data(url):
     t1 = tm()
     resp_len = None
+    stuck = False
     while not resp_len:
-        if (tm() - t1) >= 4:
-            print "~~RESETTING~~"
-            reset_()
+        if (tm() - t1) >= 3*60:
+            stuck = True
+            resp_len = 1
         try:
             renew_connection()
             resp =  request(url)
@@ -54,6 +55,9 @@ def get_data(url):
         except:
             slp(5)
             pass
+    if stuck:
+        print "~~RESETTING~~"
+        reset_()
 
     return resp
 
