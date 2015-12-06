@@ -7,6 +7,7 @@ from itertools import cycle
 import redis
 from pyquery import PyQuery as pq_
 
+
 from cities import countries
 from configs import configs
 from parse_profile_details import indeed_resumes_details
@@ -19,6 +20,15 @@ from user_agents import user_agents
 data_dir = '../../data/'
 locale.setlocale( locale.LC_ALL, 'en_US.UTF-8' ) 
 skillset = configs['skills_file'] #--change this to change the filename
+
+#--this was previously test token
+modes = {
+		'prod': {'token': 'b57edf366525324117fdcf42a1fe433327763ecae070c9ac01519ff4e5b0dab3', 'master': '104.131.30.114'},
+		}
+
+
+
+
 
 nodes_index = {
 				'indeed-master-01': {'index': 1, 'ip': '104.131.30.114', 'next': 'indeed-master-02'},
