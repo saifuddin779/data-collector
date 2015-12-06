@@ -3,6 +3,7 @@ import sys, os, requests, random, string, json, locale, gc, socket, subprocess
 from data_getter import get_data
 from time import time as tm, sleep as slp
 from itertools import cycle
+from subprocess import call
 
 import skiff
 from pyquery import PyQuery as pq_
