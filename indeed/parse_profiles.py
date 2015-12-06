@@ -94,13 +94,10 @@ class indeed_resumes(object):
 				postfix = '&start=%d&limit=%d&radius=100&%s&co=%s' % (beg, end, sort, self.country_code)
 				print url_+postfix
 				data_ = self.get_resource_px(url_+postfix, 0)
-				print data_
-				sys.exit()
 				slp(3)
-				for id_set in data_:
-					for unique_id in data_:
-						print unique_id
-						n_profiles[unique_id] = True
+				for unique_id in data_:
+					print unique_id
+					n_profiles[unique_id] = True
 			t_res2 = tm()
 			print 'data is here in %f secs' % float(t_res2 - t_res1)
 			print 'till now, the set is .. %d ids --> %s (%d)' % (len(n_profiles), keyword, keyword_index)
