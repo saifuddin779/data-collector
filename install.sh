@@ -41,6 +41,6 @@ service rsyslog stop
 
 #run the tmux session
 tmux new -d -s scrap_session
-tmux send -t scrap_session.0 "cd data-collector/indeed/" ENTER
-tmux send -t scrap_session.0 "python db_access.py generate" ENTER
-tmux send -t scrap_session.0 "python parse_profiles.py $country $master" ENTER
+# tmux send -t scrap_session.0 "cd data-collector/indeed/" ENTER
+# tmux send -t scrap_session.0 "python db_access.py generate" ENTER
+# tmux send -t scrap_session.0 "python parse_profiles.py $country $master" ENTER
