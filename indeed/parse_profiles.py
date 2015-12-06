@@ -70,6 +70,13 @@ class indeed_resumes(object):
 	  	out = filter(lambda p: len(p), out)
 	  	return out
 
+	def log_status(self, keyword_index, status):
+		f = open('../../progress.txt', 'wb')
+		comp = "%d %s" % (keyword_index, status)
+		f.write(comp)
+		f.close()
+		return
+
 	def dispatch(self, data, keyword, index):
 		directory = '../../data/chunks/%s' % keyword+'-'+str(index)
 		if not os.path.exists(directory):
@@ -99,6 +106,8 @@ class indeed_resumes(object):
 
 	def resource_collection(self, keyword_index, keyword, sort, rest_kewords=False):
 		start_time = tm()
+		self.log_status(keyword_index, 'begin')
+
 		n_profiles = {}
 		keyword = '%s' % keyword.replace('/', ' ')
 		keyword = keyword.strip('\n')
@@ -145,6 +154,8 @@ class indeed_resumes(object):
 		print 'total records collected for %s (%d) --> %d' % (keyword, keyword_index, len(n_profiles))
 		print 'begin dispatching..'
 		self.dispatch(n_profiles.keys(), keyword, keyword_index)
+		slp(5)
+		self.log_status(keyword_index, 'end')
 		return
 	
 	def get_filter_urls_px(self, init_url, counter):
