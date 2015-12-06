@@ -69,6 +69,8 @@ class indeed_resumes(object):
 		keyword = keyword.strip('\n')
 		init_url = self.init_url % (keyword.replace(' ', '+'), 0, 50)
 		filtering_urls, result_count = self.get_filter_urls_px(init_url, 0)
+		print result_count, type(result_count)
+		sys.exit()
 		if result_count < 500:
 			return
 
