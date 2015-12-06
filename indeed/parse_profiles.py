@@ -97,7 +97,6 @@ class indeed_resumes(object):
 				data_ = self.get_resource_px(url_+postfix, 0)
 				slp(3)
 				for unique_id in data_:
-					print unique_id
 					n_profiles[unique_id] = True
 			t_res2 = tm()
 			print 'data is here in %f secs' % float(t_res2 - t_res1)
