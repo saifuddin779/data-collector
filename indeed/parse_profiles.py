@@ -86,7 +86,7 @@ class indeed_resumes(object):
 		files = []
 		#--save all the chunks
 		for each in data:
-			print each
+			print len(each)
 			print '###'
 			name = ''.join(random.choice(string.lowercase) for x in range(10))+'.txt'
 			filepath = directory+'/'+name
