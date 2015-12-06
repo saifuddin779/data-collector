@@ -109,8 +109,6 @@ class indeed_resumes(object):
 			return
 
 		for route in filtering_urls:
-			if len(n_profiles) >= 300:
-				break
 			t_res1 = tm()
 			url_ = self.url_ % pq_(route).children('a').attr('href')
 			count = pq_(route).children('span').text().replace('+', '')
