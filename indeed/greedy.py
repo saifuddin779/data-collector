@@ -19,6 +19,7 @@ def greedy():
 						sleep(0.7)
 				f.close()
 				os.remove(directory+'%s' % i)
+				sleep(100)
 		else:
 			print 'waiting for the dispatch..'
 			sleep(25)
