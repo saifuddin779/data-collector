@@ -15,7 +15,7 @@ def greedy():
 						obj = indeed_resumes_details(each.encode('utf-8'))
 						data = obj.resource_collection()
 						obj.save_to_disk(data, each)
-						print '-->', each, len(each), i_
+						print ('-->', each, len(each), i_)
 						sleep(0.7)
 				f.close()
 				os.remove(directory+'%s' % i)
