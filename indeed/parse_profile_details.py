@@ -150,6 +150,6 @@ if __name__ == '__main__':
 		obj = indeed_resumes_details('c3a2e69dd2e2ea83')
 		data = obj.resource_collection()
 		print data
-		slp(.5)
+		slp(.7)
 	t2 = tm()
 	print t2-t1
