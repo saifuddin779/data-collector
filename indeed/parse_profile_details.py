@@ -96,7 +96,7 @@ class indeed_resumes_details(object):
 			resp = requests.get(url_, headers = {'user_agent': user_agent})
 		except Exception, e:
 			print '%s not exists.. or blocked' % url_
-			slp(500)
+			slp(300)
 			return data
 
 		if resp.status_code == 200:
