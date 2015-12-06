@@ -4,9 +4,8 @@ from data_getter import get_data
 from time import time as tm, sleep as slp
 from itertools import cycle
 
-import redis
+import skiff
 from pyquery import PyQuery as pq_
-
 
 from cities import countries
 from configs import configs
@@ -15,16 +14,24 @@ from db_access import db_insert_hash, get_distincts, id_exists
 
 from user_agents import user_agents
 
-
-
 data_dir = '../../data/'
 locale.setlocale( locale.LC_ALL, 'en_US.UTF-8' ) 
 skillset = configs['skills_file'] #--change this to change the filename
 
 #--this was previously test token
-modes = {
-		'prod': {'token': 'b57edf366525324117fdcf42a1fe433327763ecae070c9ac01519ff4e5b0dab3', 'master': '104.131.30.114'},
-		}
+token = 'b57edf366525324117fdcf42a1fe433327763ecae070c9ac01519ff4e5b0dab3'
+
+def get_all_nodes():
+	drops = {}
+	skiffer = skiff.rig(token)
+	for k skiffer.Droplet.all():
+		name = k.name
+		for i in k.v4:
+			ip_address = i.ip_address
+		if name != 'indeed-master-01':
+			drops[name] = ip_address
+	return drops
+
 class indeed_resumes(object):
 	def __init__(self, country_code, master, index):
 		self.country_code = country_code
@@ -54,13 +61,40 @@ class indeed_resumes(object):
 
 	def chunk_it(self, seq, num):
 		avg = len(seq) / float(num)
-	  	out = []
-	  	last = 0.0
-
+		out = []
+		last = 0.0
 	  	while last < len(seq):
 	  		out.append(seq[int(last):int(last + avg)])
 	  		last += avg
+	  	out = filter(lambda p: len(p), out)
 	  	return out
+
+	def dispatch(self, data, keyword, index):
+		directory = '../../data/chunks/%s' % keyword+'-'+str(index)
+		if not os.path.exists(directory):
+			os.makedirs(directory)
+		command = 'scp -o "StrictHostKeyChecking no" %s root@%s:data/collect/%s'
+		data = self.chunk_it(data, 4)
+		files = []
+		#--save all the chunks
+		for each in data:
+			print each
+			print '###'
+			name = ''.join(random.choice(string.lowercase) for x in range(10))+'.txt'
+			filepath = directory+'/'+name
+			f = open(filepath, 'wb')
+			for i in each:
+				f.write(i+'\n')
+			f.close()
+			files.append([filepath, name])
+
+		drops = get_all_nodes()
+		for g, k in enumerate(drops):
+			command_ = command % (files[g][0], drops[k], files[g][1])
+			execute = call([command], shell=True)
+		return
+			
+
 
 	def resource_collection(self, keyword_index, keyword, sort, rest_kewords=False):
 		start_time = tm()
@@ -74,6 +108,8 @@ class indeed_resumes(object):
 			return
 
 		for route in filtering_urls:
+			if len(n_profiles) > = 300:
+				break
 			t_res1 = tm()
 			url_ = self.url_ % pq_(route).children('a').attr('href')
 			count = pq_(route).children('span').text().replace('+', '')
@@ -98,6 +134,7 @@ class indeed_resumes(object):
 				slp(3)
 				for unique_id in data_:
 					n_profiles[unique_id] = True
+
 			t_res2 = tm()
 			print 'data is here in %f secs' % float(t_res2 - t_res1)
 			print 'till now, the set is .. %d ids --> %s (%d)' % (len(n_profiles), keyword, keyword_index)
@@ -107,6 +144,8 @@ class indeed_resumes(object):
 		current_time = tm()
 		print 'current time passed..%d secs for one round of %s (%d)' % (int(current_time - begin_time), keyword, keyword_index)
 		print 'total records collected for %s (%d) --> %d' % (keyword, keyword_index, len(n_profiles))
+		print 'begin dispatching..'
+		self.dispatch(n_profiles.keys(), keyword, keyword_index)
 		return
 	
 	def get_filter_urls_px(self, init_url, counter):

@@ -29,7 +29,7 @@ class DigitalOceanManager(object):
 		self.backup = False
 
 	def create_droplet(self, slug_size='512mb'):
-		random_postfix = ''.join(random.choice(string.lowercase) for x in range(8))
+		random_postfix = ''.join(random.choice(string.lowercase) for x in range(10))
 		node_name = 'indeed-slave-%s-%s' % (self.country, random_postfix)
 		droplet = self.skiffer.Droplet.create(
 										{

@@ -36,15 +36,15 @@ class indeed_resumes_details(object):
 		details = self.extract_details(data)
 		return details
 
-	def save_to_disk(self, data):
+	def save_to_disk(self, data, unique_id):
 		if data:
 			try:
-				directory = '../../data/resumes/%s' % data['unique_id'][0:2]
+				directory = '../../data/resumes/%s' % unique_id[0:2]
 			except:
 				return
 			if not os.path.exists(directory):
 				os.makedirs(directory)
-			filename = '%s/%s.json' % (directory, data['unique_id'])
+			filename = '%s/%s.json' % (directory, unique_id)
 			f = open(filename, 'wb')
 			f.write(json.dumps(data))
 			f.close()
@@ -162,7 +162,8 @@ def save_profiles(db_file, index=False):
 # 	for i in range(1000):
 # 		obj = indeed_resumes_details('c3a2e69dd2e2ea83')
 # 		data = obj.resource_collection()
-# 		print data
+# 		obj.save_to_disk(data, 'c3a2e69dd2e2ea83')
 # 		slp(.7)
+# 		break
 # 	t2 = tm()
 # 	print t2-t1
