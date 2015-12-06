@@ -24,7 +24,7 @@ token = 'b57edf366525324117fdcf42a1fe433327763ecae070c9ac01519ff4e5b0dab3'
 def get_all_nodes():
 	drops = {}
 	skiffer = skiff.rig(token)
-	for k skiffer.Droplet.all():
+	for k in skiffer.Droplet.all():
 		name = k.name
 		for i in k.v4:
 			ip_address = i.ip_address
