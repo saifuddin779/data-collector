@@ -149,6 +149,10 @@ class indeed_resumes(object):
 			slp(10)
 			self.final_all += len(n_profiles)
 			gc.collect()
+
+			#--limiting here..
+			if len(n_profiles) >= 12000:
+				break
 		current_time = tm()
 		print 'current time passed..%d secs for one round of %s (%d)' % (int(current_time - begin_time), keyword, keyword_index)
 		print 'total records collected for %s (%d) --> %d' % (keyword, keyword_index, len(n_profiles))
