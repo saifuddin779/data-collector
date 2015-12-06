@@ -31,9 +31,9 @@ echo y | apt-get install sshpass
 
 #make directory for dataset
 mkdir data/
+mkdir data/resumes/
 
 #download repo
-#git clone https://saifuddin778:saifuddin778@gitlab.com/saifuddin778/data-collector.git
 git clone https://saifuddin779:saifuddin7791@github.com/saifuddin779/data-collector.git
 echo "DONE CLONING REPO.."
 pip install -r data-collector/requirements.txt

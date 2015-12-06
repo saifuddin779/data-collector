@@ -19,6 +19,13 @@ class droplets_manager(object):
                                		)
 		droplet.wait_till_done()
 		droplet = droplet.refresh()
+		name = droplet.name
+		for k in droplet.v4:
+			ip_address = k.ip_address
+
+		#--now send the config file to it and prepare it to work
+		
+
 		return {'name': droplet.name, 'ip': droplet.ip_address}
 
 	def destroy_droplet(self, name):
