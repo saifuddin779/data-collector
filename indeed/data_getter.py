@@ -45,6 +45,7 @@ def get_data(url):
     resp_len = None
     while not resp_len:
         if (tm() - t1) >= 4:
+            print "~~RESETTING~~"
             reset_()
         try:
             renew_connection()
