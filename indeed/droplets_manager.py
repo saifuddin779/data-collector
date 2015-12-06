@@ -22,9 +22,6 @@ class droplets_manager(object):
 		name = droplet.name
 		for k in droplet.v4:
 			ip_address = k.ip_address
-
-		#--now send the config file to it and prepare it to work
-
 		return {'name': droplet.name, 'ip': ip_address}
 
 	def destroy_droplet(self, name):

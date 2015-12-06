@@ -25,18 +25,6 @@ skillset = configs['skills_file'] #--change this to change the filename
 modes = {
 		'prod': {'token': 'b57edf366525324117fdcf42a1fe433327763ecae070c9ac01519ff4e5b0dab3', 'master': '104.131.30.114'},
 		}
-
-
-
-
-
-nodes_index = {
-				'indeed-master-01': {'index': 1, 'ip': '104.131.30.114', 'next': 'indeed-master-02'},
-				'indeed-master-02': {'index': 2, 'ip': '162.243.8.180', 'next': 'indeed-master-03'},
-				'indeed-master-03': {'index': 3, 'ip': '159.203.126.194', 'next': 'indeed-master-01'}
-			  }
-
-
 class indeed_resumes(object):
 	def __init__(self, country_code, master, index):
 		self.country_code = country_code
@@ -48,12 +36,7 @@ class indeed_resumes(object):
 		self.url_ = 'http://www.indeed.com/resumes%s'
 		self.user_agents_cycle = cycle(user_agents)
 		self.max_recursion_depth = 7
-		self.time_all = []
-
-	def init_redis(self):
-		if not self.r_host.get('all_count'):
-			self.r_host.set('all_count', 0)
-		return
+		self.final_all = 0
 
 	def save_to_disk(self, data):
 		if data:
@@ -82,30 +65,25 @@ class indeed_resumes(object):
 	def resource_collection(self, keyword_index, keyword, sort, rest_kewords=False):
 		start_time = tm()
 		n_profiles = {}
-		final_all = 0
 		keyword = '%s' % keyword.replace('/', ' ')
 		keyword = keyword.strip('\n')
 		init_url = self.init_url % (keyword.replace(' ', '+'), 0, 50)
-		#filtering_urls, result_count  = self.get_filter_urls(init_url, 0)
 		filtering_urls, result_count = self.get_filter_urls_px(init_url, 0)
 		if result_count < 500:
 			return
-		
+
 		for route in filtering_urls:
-			n_all = 0
+			t_res1 = tm()
 			url_ = self.url_ % pq_(route).children('a').attr('href')
 			count = pq_(route).children('span').text().replace('+', '')
 			if count.isdigit():
 				count = int(count)
 			else:
 				count = 0
-
 			if count >= 1000:
 				counter = 10
 			else:
 				counter = int(max(float(count)/100, 1))
-
-			routes_container = []
 			for i in range(counter):
 				if i == 0:
 					beg = i
@@ -114,51 +92,20 @@ class indeed_resumes(object):
 					beg = end
 					end = end+100
 				postfix = '&start=%d&limit=%d&radius=100&%s&co=%s' % (beg, end, sort, self.country_code)
-				routes_container.append(url_+postfix)
-
-			t_res1 = tm()
-
-			# data = []
-			# routes_container = self.chunk_it(routes_container, 3)
-			# routes_container = filter(lambda p: len(p), routes_container)
-			# for routes_chunk in routes_container:
-			# 	data.append(self.get_resource(routes_chunk, 0))
-			
-			data =[]
-			for i_ in routes_container:
-				#data.append(self.get_resource2(i_, 0))
-				data.append(self.get_resource_px(i_, 0))
-				slp(2)
-			t_res2 = tm()
-			
-			print 'data is here in %f secs..--> %d' % (float(t_res2 - t_res1), len(data))
-
-			profile_set = []
-			for data_ in data:
+				data_ = self.get_resource_px(url_+postfix, 0)
+				slp(3)
 				for id_set in data_:
 					for unique_id in id_set:
-						profile_set.append(unique_id)
-						n_all += 1
-			print 'the set is .. %d ids ..' % len(profile_set)
-			#slp(10)
-			profile_set = filter(lambda n: n  != None, profile_set)
-			t_prf1 = tm()
-			
-			#profile_data = indeed_resumes_details(profile_set).resource_collection()
-			#for profile in profile_data:
-			#	self.save_to_disk(profile)
-			t_prf2 = tm()
-			print 'profiles saved in %f secs.. --> %d' % (float(t_prf2 - t_prf1), len(profile_set))
-			print 'inserted %d records to db.. %s, %d' % (n_all, keyword, keyword_index)
-			n_profiles = {}
-			slp(10) #--sleeping for 10 secs for every filter for not making calls too fast and get blocked quickly
-			final_all += n_all
+						n_profiles[unique_id] = True
+			t_res2 = tm()
+			print 'data is here in %f secs' % float(t_res2 - t_res1)
+			print 'till now, the set is .. %d ids --> %s (%d)' % (len(n_profiles), keyword, keyword_index)
+			slp(10)
+			self.final_all += len(n_profiles)
 			gc.collect()
-
 		current_time = tm()
-		self.time_all.append((keyword, final_all, current_time - start_time))
 		print 'current time passed..%d secs for one round of %s (%d)' % (int(current_time - begin_time), keyword, keyword_index)
-		print 'total records collected for %s (%d) --> %d' % (keyword, keyword_index, final_all)
+		print 'total records collected for %s (%d) --> %d' % (keyword, keyword_index, len(n_profiles))
 		return
 	
 	def get_filter_urls_px(self, init_url, counter):
@@ -291,9 +238,7 @@ class indeed_resumes(object):
 	
 	def begin(self):
 		job_start_time = tm()
-		#sorts = ['sort=date', '']
 		keywords_done_idx = self.index
-		#keywords_done_idx = self.r_master.get(self.country_code) #--this over here should talk to master's redis
 		print 'starting from %s' % str(keywords_done_idx)
 		if not keywords_done_idx:
 			keywords_done_idx = -1
@@ -306,33 +251,12 @@ class indeed_resumes(object):
 				continue
 			else:
 				print 'now working on..%d in begin..' % i 
-				#for sort in sorts:
 				self.resource_collection(i, keyword, '')
-				slp(60)
+				print 'total till now for all... %d' % (self.final_all)
 				print 'sleeping after %d for a minute to relax..' % i
-				#--checking the block
-				if sum(map(lambda p: p[1], self.time_all[-2:])) == 0 and len(self.time_all) > 2:
-					check = self.get_static_resource(self.fixed_test_url)
-					if not len(check):
-						print 'putting to sleep for 10 mins because last 2 keywords went nill and check indicated block..'
-						print 'currently worked at .. %d' % i
-						slp(400)
+				slp(60)
+		self.keywords.close()
 
-				#--switching to the sibling node every 20 mins
-				time_right_now = tm()
-				if (time_right_now - job_start_time) >= 60*20:
-					host_name = socket.gethostname() #--get current hostname
-					
-					sibling_name = nodes_index[host_name]['next'] #--get its sibling name
-					sibling_ip = nodes_index[sibling_name]['ip'] #--get the siblings ip
-					sibling_url = 'http://%s:5000/begin/' % sibling_ip
-					payload = {'index': i, 'country_code': self.country_code} #--index of the keyword in process
-					r = requests.get(sibling_url, params=payload) #--ask the sibling to begin collection from the given index
-					if r.status_code == 200:
-						print r.text
-						print '%s closing at %d..will begin soon..' % (host_name, i)
-					self.keywords.close()
-					return
 
 	def send_to_master(self):
 		host_name = socket.gethostname()
@@ -340,7 +264,6 @@ class indeed_resumes(object):
 		print command_
 		execute = subprocess.call([command_], shell=True)
 		return
-
 
 if __name__ == '__main__':
 	countries_list = ['US', 'IN', 'GB', 'AU', 'CA']
