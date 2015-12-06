@@ -24,9 +24,8 @@ class droplets_manager(object):
 			ip_address = k.ip_address
 
 		#--now send the config file to it and prepare it to work
-		
 
-		return {'name': droplet.name, 'ip': droplet.ip_address}
+		return {'name': droplet.name, 'ip': ip_address}
 
 	def destroy_droplet(self, name):
 		pass
