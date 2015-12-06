@@ -70,7 +70,6 @@ class indeed_resumes(object):
 		init_url = self.init_url % (keyword.replace(' ', '+'), 0, 50)
 		filtering_urls, result_count = self.get_filter_urls_px(init_url, 0)
 		print result_count, type(result_count)
-		sys.exit()
 		if result_count < 500:
 			return
 
@@ -253,7 +252,7 @@ class indeed_resumes(object):
 			if i <= keywords_done_idx:
 				continue
 			else:
-				print 'now working on..%d in begin..' % i 
+				print 'now working on..%d, %s in begin..' % (i, keyword) 
 				self.resource_collection(i, keyword, '')
 				print 'total till now for all... %d' % (self.final_all)
 				print 'sleeping after %d for a minute to relax..' % i
