@@ -15,13 +15,13 @@ def greedy():
 						obj = indeed_resumes_details(each.encode('utf-8'))
 						data = obj.resource_collection()
 						obj.save_to_disk(data, each)
-						print '-->', each
+						print '-->', each, len(each)
 						sleep(0.7)
 				f.close()
 				os.remove(directory+'%s' % i)
 		else:
 			print 'waiting for the dispatch..'
-			sleep(20)
+			sleep(25)
 
 if __name__ == '__main__':
 	greedy()
