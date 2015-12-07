@@ -35,6 +35,11 @@ def reset_():
     #--it finished properly
     if status == 'end':
         index = index
+
+    #--stop the tor and associated stuff manually
+    commands = ["/etc/init.d/tor stop", "/etc/init.d/privoxy stop"]
+    for each in commands:
+        call([each], shell=True)
     
     command = "bash restart.sh %d" % index
     execute = call([command], shell=True)
