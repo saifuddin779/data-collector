@@ -71,10 +71,11 @@ class indeed_resumes(object):
 	  	return out
 
 	def log_status(self, keyword_index, status):
-		f = open('../../progress.txt', 'wb')
+		#f = open('../../progress.txt', 'wb')
 		comp = "%d %s" % (keyword_index, status)
-		f.write(comp)
-		f.close()
+		#f.write(comp)
+		#f.close()
+		os.environ['recent_'] = comp
 		return
 
 	def dispatch(self, data, keyword, index):
@@ -151,7 +152,7 @@ class indeed_resumes(object):
 			gc.collect()
 
 			#--limiting here..
-			if len(n_profiles) >= 15000:
+			if len(n_profiles) >= 13000:
 				break
 		current_time = tm()
 		print 'total time taken for %s (%d) is %d secs..' % (keyword, keyword_index, int(current_time - start_time))
@@ -161,6 +162,7 @@ class indeed_resumes(object):
 		self.dispatch(n_profiles.keys(), keyword, keyword_index)
 		slp(5)
 		self.log_status(keyword_index, 'end')
+		get_data('', keyword_index)
 		return
 	
 	def get_filter_urls_px(self, init_url, counter):

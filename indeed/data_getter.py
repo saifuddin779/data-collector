@@ -1,3 +1,4 @@
+import sys, os
 from TorCtl import TorCtl
 import urllib2
 from time import sleep as slp, time as tm
@@ -23,10 +24,7 @@ def renew_connection():
     conn.close()
 
 def reset_():
-    f = open('../../progress.txt', 'rb')
-    for i in f:
-        comp = i
-    f.close()
+    comp = os.environ['recent_']
     comp = comp.split(' ')
     index = int(comp[0])
     status = comp[1]
@@ -34,13 +32,17 @@ def reset_():
     #--it began, but got stuck sadly
     if status == 'begin':
         index = index-1
+    #--it finished properly
     if status == 'end':
         index = index
-
+    
     command = "bash restart.sh %d" % index
     execute = call([command], shell=True)
 
-def get_data(url):
+def get_data(url, index=False):
+    if index:
+        reset_()
+
     t1 = tm()
     resp_len = None
     stuck = False

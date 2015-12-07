@@ -7,7 +7,7 @@ killall python
 /etc/init.d/tor stop
 /etc/init.d/privoxy stop
 sleep 10
-/etc/init.d/tor start
-/etc/init.d/privoxy start
+/etc/init.d/tor restart
+/etc/init.d/privoxy restart
 
 python parse_profiles.py US prod $index
