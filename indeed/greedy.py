@@ -12,6 +12,7 @@ def greedy():
 				f = open(directory+'%s' % i, 'rb')
 				for i_, each in enumerate(f.readlines()):
 					if each:
+						each = each.strip('\n')
 						obj = indeed_resumes_details(each.encode('utf-8'))
 						data = obj.resource_collection()
 						obj.save_to_disk(data, each)

@@ -31,7 +31,7 @@ class indeed_resumes_details(object):
 
 
 	def resource_collection(self):
-		url_ = browse_url_profile_details % self.unique_id.strip('\n')
+		url_ = browse_url_profile_details % self.unique_id
 		data = self.get_resource(url_)
 		details = self.extract_details(data)
 		return details
