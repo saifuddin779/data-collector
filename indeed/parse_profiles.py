@@ -151,9 +151,10 @@ class indeed_resumes(object):
 			gc.collect()
 
 			#--limiting here..
-			if len(n_profiles) >= 12000:
+			if len(n_profiles) >= 15000:
 				break
 		current_time = tm()
+		print 'total time taken for %s (%d) is %d secs..' % (keyword, keyword_index, int(current_time - start_time))
 		print 'current time passed..%d secs for one round of %s (%d)' % (int(current_time - begin_time), keyword, keyword_index)
 		print 'total records collected for %s (%d) --> %d' % (keyword, keyword_index, len(n_profiles))
 		print 'begin dispatching..'
