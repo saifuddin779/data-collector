@@ -74,7 +74,7 @@ class indeed_resumes(object):
 		if data == 1:
 			if len(self.n_profiles):
 				self.dispatch(self.n_profiles.keys(), self.keyword, self.keyword_index)
-				self.log_status(keyword_index, 'end')
+				self.log_status(self.keyword_index, 'end')
 				slp(2)
 				print "~~RESETTING~~ IN BETWEEN..but SENT DATA"
 			print "~~RESETTING~~ IN BETWEEN..but no DATA SENT"
@@ -120,7 +120,7 @@ class indeed_resumes(object):
 
 		self.log_status(keyword_index, 'begin')
 		self.n_profiles = {}
-		
+
 		keyword = '%s' % keyword.replace('/', ' ')
 		keyword = keyword.strip('\n')
 		init_url = self.init_url % (keyword.replace(' ', '+'), 0, 50)
