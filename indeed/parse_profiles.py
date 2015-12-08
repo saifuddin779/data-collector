@@ -91,6 +91,9 @@ class indeed_resumes(object):
 		directory = '../../data/chunks/%s' % keyword+'-'+str(index)
 		if not os.path.exists(directory):
 			os.makedirs(directory)
+		if not len(data):
+			return
+
 		command = 'scp -o "StrictHostKeyChecking no" %s root@%s:data/collect/%s'
 		data = self.chunk_it(data, 4)
 		files = []
@@ -106,10 +109,11 @@ class indeed_resumes(object):
 			f.close()
 			files.append([filepath, name])
 
-		drops = get_all_nodes()
-		for g, k in enumerate(drops):
-			command_ = command % (files[g][0], drops[k], files[g][1])
-			execute = call([command_], shell=True)
+		if len(files) and len(data):
+			drops = get_all_nodes()
+			for g, k in enumerate(drops):
+				command_ = command % (files[g][0], drops[k], files[g][1])
+				execute = call([command_], shell=True)
 		return
 
 	def resource_collection(self, keyword_index, keyword, sort, rest_kewords=False):
