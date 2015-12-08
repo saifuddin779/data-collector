@@ -1,6 +1,6 @@
 import sys, os, requests, random, string, json, locale, gc, socket, subprocess
 #import grequests
-from data_getter import get_data
+from data_getter import get_data, reset_
 from time import time as tm, sleep as slp
 from itertools import cycle
 from subprocess import call
@@ -70,11 +70,20 @@ class indeed_resumes(object):
 	  	out = filter(lambda p: len(p), out)
 	  	return out
 
+	def eval_(self, data):
+		if data == 1:
+			if len(self.n_profiles):
+				self.dispatch(self.n_profiles.keys(), self.keyword, self.keyword_index)
+				self.log_status(keyword_index, 'end')
+				slp(2)
+				print "~~RESETTING~~ IN BETWEEN..but SENT DATA"
+			print "~~RESETTING~~ IN BETWEEN..but no DATA SENT"
+			reset_()
+		else:
+			return data
+
 	def log_status(self, keyword_index, status):
-		#f = open('../../progress.txt', 'wb')
 		comp = "%d %s" % (keyword_index, status)
-		#f.write(comp)
-		#f.close()
 		os.environ['recent_'] = comp
 		return
 
@@ -102,14 +111,16 @@ class indeed_resumes(object):
 			command_ = command % (files[g][0], drops[k], files[g][1])
 			execute = call([command_], shell=True)
 		return
-			
-
 
 	def resource_collection(self, keyword_index, keyword, sort, rest_kewords=False):
 		start_time = tm()
-		self.log_status(keyword_index, 'begin')
+		
+		self.keyword_index = keyword_index
+		self.keyword = keyword
 
-		n_profiles = {}
+		self.log_status(keyword_index, 'begin')
+		self.n_profiles = {}
+		
 		keyword = '%s' % keyword.replace('/', ' ')
 		keyword = keyword.strip('\n')
 		init_url = self.init_url % (keyword.replace(' ', '+'), 0, 50)
@@ -117,7 +128,6 @@ class indeed_resumes(object):
 		print result_count, type(result_count)
 		if result_count < 500:
 			return
-
 		for route in filtering_urls:
 			t_res1 = tm()
 			url_ = self.url_ % pq_(route).children('a').attr('href')
@@ -142,32 +152,32 @@ class indeed_resumes(object):
 				data_ = self.get_resource_px(url_+postfix, 0)
 				slp(3)
 				for unique_id in data_:
-					n_profiles[unique_id] = True
+					self.n_profiles[unique_id] = True
 
 			t_res2 = tm()
 			print 'data is here in %f secs' % float(t_res2 - t_res1)
-			print 'till now, the set is .. %d ids --> %s (%d)' % (len(n_profiles), keyword, keyword_index)
+			print 'till now, the set is .. %d ids --> %s (%d)' % (len(self.n_profiles), keyword, keyword_index)
 			slp(10)
-			self.final_all += len(n_profiles)
+			self.final_all += len(self.n_profiles)
 			gc.collect()
 
 			#--limiting here..
-			if len(n_profiles) >= 13000:
+			if len(self.n_profiles) >= 13000:
 				break
 		current_time = tm()
 		print 'total time taken for %s (%d) is %d secs..' % (keyword, keyword_index, int(current_time - start_time))
 		print 'current time passed..%d secs for one round of %s (%d)' % (int(current_time - begin_time), keyword, keyword_index)
-		print 'total records collected for %s (%d) --> %d' % (keyword, keyword_index, len(n_profiles))
+		print 'total records collected for %s (%d) --> %d' % (keyword, keyword_index, len(self.n_profiles))
 		print 'begin dispatching..'
-		self.dispatch(n_profiles.keys(), keyword, keyword_index)
+		self.dispatch(self.n_profiles.keys(), keyword, keyword_index)
 		slp(5)
 		self.log_status(keyword_index, 'end')
-		get_data('', keyword_index)
+		reset_()
 		return
 	
 	def get_filter_urls_px(self, init_url, counter):
 		"""NEW -- PROXIED WAY OF GETTING DATA"""
-		filtering_data = get_data(init_url)
+		filtering_data = self.eval_(get_data(init_url))
 		filtering_data = pq_(filtering_data)
 
 		count =  filtering_data('#search_header #rezsearch #search_table #result_count').text().split(' ')[0].replace(',', '')
@@ -210,7 +220,7 @@ class indeed_resumes(object):
 	def get_resource_px(self, url_, counter):
 		"""NEW -- PROXIED WAY OF GETTING DATA"""
 		data = []
-		resp = get_data(url_)
+		resp = self.eval_(get_data(url_))
 		html = pq_(resp)
 		html = html('#results').children()
 		for each in html:

@@ -32,7 +32,7 @@ def reset_():
     #--it began, but got stuck sadly
     if status == 'begin':
         index = index-1
-    #--it finished properly
+    #--it finished properly or was interrupted in the middle..doesn't matter..consider the keyword being over..
     if status == 'end':
         index = index
 
@@ -40,7 +40,7 @@ def reset_():
     commands = ["/etc/init.d/tor stop", "/etc/init.d/privoxy stop"]
     for each in commands:
         call([each], shell=True)
-    
+
     command = "bash restart.sh %d" % index
     execute = call([command], shell=True)
 
@@ -63,8 +63,9 @@ def get_data(url, index=False):
             slp(5)
             pass
     if stuck:
-        print "~~RESETTING~~"
-        reset_()
+        #print "~~RESETTING~~"
+        #reset_()
+        return 1
 
     return resp
 
