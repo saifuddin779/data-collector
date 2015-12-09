@@ -32,6 +32,7 @@ echo y | apt-get install sshpass
 #make directory for dataset
 mkdir data/
 mkdir data/resumes/
+mkdir data/collect/
 
 #download repo
 git clone https://saifuddin779:saifuddin7791@github.com/saifuddin779/data-collector.git

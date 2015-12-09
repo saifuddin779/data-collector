@@ -39,7 +39,7 @@ def get_all_nodes():
 		name = k.name
 		for i in k.v4:
 			ip_address = i.ip_address
-		if name in ['indeed-master-01', 'indeed-master-02']:
+		if name not in ['indeed-master-01', 'indeed-master-02']:
 			drops[name] = ip_address
 	return drops
 
