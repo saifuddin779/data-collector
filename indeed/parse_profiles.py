@@ -20,7 +20,17 @@ locale.setlocale( locale.LC_ALL, 'en_US.UTF-8' )
 skillset = configs['skills_file'] #--change this to change the filename
 
 #--this was previously test token
-token = 'b57edf366525324117fdcf42a1fe433327763ecae070c9ac01519ff4e5b0dab3'
+#token_1 = 'b57edf366525324117fdcf42a1fe433327763ecae070c9ac01519ff4e5b0dab3'
+#token_2 = '3ba7c3a510ccae4bed46bce1a86038c050e2c732c75ce57adf548c07061477d5'
+
+def get_token():
+	f = open('../../token.txt', 'rb')
+	for a in f:
+		token = a.strip('\n')
+	f.close()
+	return token
+
+token = get_token()
 
 def get_all_nodes():
 	drops = {}
@@ -29,7 +39,7 @@ def get_all_nodes():
 		name = k.name
 		for i in k.v4:
 			ip_address = i.ip_address
-		if name != 'indeed-master-01':
+		if name in ['indeed-master-01', 'indeed-master-02']:
 			drops[name] = ip_address
 	return drops
 
