@@ -53,6 +53,7 @@ class indeed_resumes(object):
 		self.fixed_test_url = 'http://www.indeed.com/resumes?q=excel&co='+self.country_code
 		self.url_ = 'http://www.indeed.com/resumes%s'
 		self.user_agents_cycle = cycle(user_agents)
+		self.drops = get_all_nodes()
 		self.max_recursion_depth = 7
 		self.final_all = 0
 
@@ -120,7 +121,7 @@ class indeed_resumes(object):
 			files.append([filepath, name])
 
 		if len(files) and len(data):
-			drops = get_all_nodes()
+			drops = self.drops
 			for g, k in enumerate(drops):
 				command_ = command % (files[g][0], drops[k], files[g][1])
 				execute = call([command_], shell=True)
