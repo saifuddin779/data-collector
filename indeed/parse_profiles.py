@@ -30,7 +30,15 @@ def get_token():
 	f.close()
 	return token
 
+def get_max_index():
+	f = open('../../max_index.txt', 'rb')
+	for a in f:
+		max_index = int(a.strip('\n'))
+	f.close()
+
+
 token = get_token()
+max_index = get_max_index()
 
 def get_all_nodes():
 	drops = {}
@@ -329,7 +337,7 @@ class indeed_resumes(object):
 		
 		for i, keyword in enumerate(self.keywords):
 			keyword = keyword.replace('\n', '')
-			if i <= keywords_done_idx:
+			if i <= keywords_done_idx or i >= max_index:
 				continue
 			else:
 				print 'now working on..%d, %s in begin..' % (i, keyword) 
