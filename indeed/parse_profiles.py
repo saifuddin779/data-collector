@@ -30,7 +30,16 @@ def get_token():
 	f.close()
 	return token
 
+def get_max_index():
+	f = open('../../max_index.txt', 'rb')
+	for a in f:
+		max_index = int(a.strip('\n'))
+	f.close()
+	return max_index
+
+
 token = get_token()
+max_index = get_max_index()
 
 def get_all_nodes():
 	drops = {}
@@ -171,7 +180,7 @@ class indeed_resumes(object):
 
 			t_res2 = tm()
 			print 'data is here in %f secs' % float(t_res2 - t_res1)
-			print 'till now, the set is .. %d ids --> %s (%d)' % (len(self.n_profiles), keyword, keyword_index)
+			print 'till now, the set is .. %d ids --> %s (%d, %d)' % (len(self.n_profiles), keyword, keyword_index, max_index)
 			slp(10)
 			self.final_all += len(self.n_profiles)
 			gc.collect()
@@ -329,7 +338,8 @@ class indeed_resumes(object):
 		
 		for i, keyword in enumerate(self.keywords):
 			keyword = keyword.replace('\n', '')
-			if i <= keywords_done_idx or keywords_done_idx >=501:
+
+			if i <= keywords_done_idx or i >= max_index:
 				continue
 			else:
 				print 'now working on..%d, %s in begin..' % (i, keyword) 
