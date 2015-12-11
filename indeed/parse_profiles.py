@@ -179,7 +179,7 @@ class indeed_resumes(object):
 
 			t_res2 = tm()
 			print 'data is here in %f secs' % float(t_res2 - t_res1)
-			print 'till now, the set is .. %d ids --> %s (%d)' % (len(self.n_profiles), keyword, keyword_index)
+			print 'till now, the set is .. %d ids --> %s (%d, %d)' % (len(self.n_profiles), keyword, keyword_index, max_index)
 			slp(10)
 			self.final_all += len(self.n_profiles)
 			gc.collect()
