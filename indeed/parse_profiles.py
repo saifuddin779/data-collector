@@ -329,7 +329,7 @@ class indeed_resumes(object):
 		
 		for i, keyword in enumerate(self.keywords):
 			keyword = keyword.replace('\n', '')
-			if i <= keywords_done_idx:
+			if i <= keywords_done_idx or keywords_done_idx >=501:
 				continue
 			else:
 				print 'now working on..%d, %s in begin..' % (i, keyword) 
