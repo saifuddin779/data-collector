@@ -35,6 +35,7 @@ def get_max_index():
 	for a in f:
 		max_index = int(a.strip('\n'))
 	f.close()
+	return max_index
 
 
 token = get_token()
