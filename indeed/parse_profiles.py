@@ -42,14 +42,18 @@ token = get_token()
 max_index = get_max_index()
 
 def get_all_nodes():
-	drops = {}
-	skiffer = skiff.rig(token)
-	for k in skiffer.Droplet.all():
-		name = k.name
-		for i in k.v4:
-			ip_address = i.ip_address
-		if name not in ['indeed-master-01', 'indeed-master-02']:
-			drops[name] = ip_address
+	# drops = {}
+	# skiffer = skiff.rig(token)
+	# for k in skiffer.Droplet.all():
+	# 	name = k.name
+	# 	for i in k.v4:
+	# 		ip_address = i.ip_address
+	# 	if name not in ['indeed-master-01', 'indeed-master-02']:
+	# 		drops[name] = ip_address
+	f = open('../../children.txt', 'rb')
+	for a in f:
+		drops = ast.literal_eval(a)
+	f.close()
 	return drops
 
 class indeed_resumes(object):
