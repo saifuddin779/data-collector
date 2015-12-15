@@ -112,7 +112,7 @@ class indeed_resumes(object):
 		return
 
 	def dispatch(self, data, keyword, index):
-		directory = '../../data/chunks/%s' % keyword+'-'+str(index)
+		directory = '../../data/chunks/%s' % keyword.replace(' ', '-')+'-'+str(index)
 		if not os.path.exists(directory):
 			os.makedirs(directory)
 		if not len(data):
