@@ -137,8 +137,11 @@ class indeed_resumes(object):
 		if len(files) and len(data):
 			drops = self.drops
 			for g, k in enumerate(drops):
-				command_ = command % (files[g][0], drops[k], files[g][1])
-				execute = call([command_], shell=True)
+				try:
+					command_ = command % (files[g][0], drops[k], files[g][1])
+					execute = call([command_], shell=True)
+				except IndexError:
+					continue
 		return
 
 	def resource_collection(self, keyword_index, keyword, sort, rest_kewords=False):
