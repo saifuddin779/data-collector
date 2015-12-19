@@ -17,7 +17,7 @@ def greedy():
 						data = obj.resource_collection()
 						obj.save_to_disk(data, each)
 						print ('-->', each, len(data), i_)
-						sleep(0.7)
+						sleep(0.9)
 				f.close()
 				os.remove(directory+'%s' % i)
 				sleep(100)
